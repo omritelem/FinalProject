@@ -14,6 +14,7 @@ using namespace std;
 ConfigurationManager::ConfigurationManager(const char* configurationPath) {
 	ReadConfigurationData(configurationPath);
 	convertSizeToCM();
+
 }
 
 void ConfigurationManager::ReadConfigurationData(const char* configurationPath) {
