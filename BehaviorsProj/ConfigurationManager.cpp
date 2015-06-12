@@ -19,20 +19,14 @@ ConfigurationManager::ConfigurationManager(const char* configurationPath) {
 void ConfigurationManager::ReadConfigurationData(const char* configurationPath) {
 	 ifstream myReadFile;
 	 int counter = 0;
+	 char attribute_name[200];
 	 myReadFile.open(configurationPath);
 	 while (!myReadFile.eof() && (counter < NUM_READ_LINES)) {
-		 char* attribute_name;
+
 		 myReadFile.getline(attribute_name,MAX_LINE_LENGTH, ' ');
 		 myReadFile.getline(this->file_data[counter],MAX_LINE_LENGTH, '\n');
 		 counter++;
 	}
-
-	 try{
-	 myReadFile.close();
-	 }
-	  catch (std::exception e) {
-	    cout<< "bla";
-	  }
 
 	this->map_path = this->file_data[0];
 	this->start_x = atoi(this->file_data[1]);
@@ -44,10 +38,6 @@ void ConfigurationManager::ReadConfigurationData(const char* configurationPath) 
 	this->robot_width = atof(this->file_data[7]);
 	this->map_resolution = atof(this->file_data[8]);
 	this->grid_resolution = atof(this->file_data[9]);
-
-
-
-
 }
 
 void ConfigurationManager::convertSizeToCM(){
