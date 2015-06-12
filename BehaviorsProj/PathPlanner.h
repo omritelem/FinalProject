@@ -26,6 +26,7 @@ public:
 	double g_cost(double g_from, int x_from, int y_from, int x_to, int y_to);
 	double total_f(double g_cost, double heurisitic);
 	void fill_heuristic();
+	void fill_g(int x_from, int y_from);
 
 	virtual ~PathPlanner();
 };

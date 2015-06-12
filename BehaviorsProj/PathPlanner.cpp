@@ -53,10 +53,37 @@ void PathPlanner::fill_heuristic( )
 	{
 		for(int j = 0; j< _grid[i].size(); j++)
 		{
-			_grid[i][j].h_val = heuristic_cost_estimate(i, j, _x_goal, _y_goal);
+			if(_grid[i][j].cell_color == 0){
+				_grid[i][j].h_val = heuristic_cost_estimate(i, j, _x_goal, _y_goal);
+			}
 		}
 	}
 }
+
+void PathPlanner::fill_g(int x_from, int y_from){
+	int i,j;
+	double currentGval;
+
+	for(i=y_from-1; i <=y_from+1; i++)
+	{
+		for(j=x_from-1; j <= x_from+1; j++)
+		{
+			if((i>=0)&&(j>=0)&&(i<_grid.size())&&(j<_grid.size()))
+			{
+				if((_grid[i][j].g_val == 0)&&(_grid[i][j].cell_color == 0)&&(i != x_from)&&(j != y_from))
+				{
+					currentGval = g_cost(_grid[x_from][y_from].g_val, x_from, y_from,i,j);
+					if((_grid[i][j].g_val > currentGval) || (_grid[i][j].g_val == 0)){
+						_grid[i][j].g_val = currentGval;
+					}
+
+				}
+			}
+		}
+	}
+}
+
+
 
 
 PathPlanner::~PathPlanner() {
