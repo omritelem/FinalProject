@@ -32,7 +32,6 @@ public:
 	Map(){}
 	void thickenMap(const char* filename, int robotLengthCM, int robotWidthCM);
 	vector<vector<grid_data> > convertMapToGrid(const char* filename, double map_resolution, double grid_resolution);
-	vector<vector<grid_data> > convert();
 
 	virtual ~Map();
 };

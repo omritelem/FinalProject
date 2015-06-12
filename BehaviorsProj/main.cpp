@@ -29,26 +29,14 @@ int main()
 //	thickenMap(cm->map_path, cm->robot_length, cm->robot_width);
 
 	Map map;
-	map.thickenMap("/home/colman/Documents/LunaWorkSpace/BehaviorsProj/roboticLabMap.png", 12, 12);
+	map.thickenMap("/home/colman/git/FinalProject/BehaviorsProj/roboticLabMap.png", 12, 12);
 
-	vector<vector<grid_data> > grid	= map.convertMapToGrid("/home/colman/Documents/LunaWorkSpace/BehaviorsProj/roboticLabMap.png", 2.5 ,10);
-
-//	vector<vector<grid_data> > grid	= map.convertMapToGrid("/home/colman/Documents/LunaWorkSpace/BehaviorsProj/miniMap2.png", 2.5 ,10);
-
-//	vector<vector<grid_data> > vec2;
-
-
-//	vector<vector<grid_data> > vec2 (15);
-//
-//	for (int c = 0; c < 15; c++)
-//	{
-//	    vec2[c].resize(10);
-//	}
-
-	vector<vector<grid_data> > grid2 = map.convert();
+	vector<vector<grid_data> > grid	= map.convertMapToGrid("/home/colman/git/FinalProject/BehaviorsProj/roboticLabMap.png", 2.5 ,10);
 
 	PathPlanner pathPlanner( grid );
 //	grid , cm.target_x, cm.target_y, cm.start_x, cm.start_y);
 
  	int i = 5;
+
+ 	return 0;
 }
