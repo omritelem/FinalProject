@@ -116,8 +116,8 @@ vector<vector<grid_data> > Map::convertMapToGrid(const char* filename, double ma
 			(grid[y / resolution_relation][x / resolution_relation]).f_val = 0;
 			(grid[y / resolution_relation][x / resolution_relation]).g_val = 0;
 			(grid[y / resolution_relation][x / resolution_relation]).h_val = 0;
-			(grid[y / resolution_relation][x / resolution_relation]).x_parent = 0;
-			(grid[y / resolution_relation][x / resolution_relation]).y_parent = 0;
+			(grid[y / resolution_relation][x / resolution_relation]).parent.x_Coordinate = 0;
+			(grid[y / resolution_relation][x / resolution_relation]).parent.y_Coordinate = 0;
 		}
 
 	return grid;

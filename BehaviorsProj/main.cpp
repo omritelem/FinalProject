@@ -33,10 +33,27 @@ int main()
 
 	vector<vector<grid_data> > grid	= map.convertMapToGrid("/home/colman/git/FinalProject/BehaviorsProj/roboticLabMap.png", 2.5 ,10);
 
-	PathPlanner pathPlanner( grid );
+	cell_coordinate cl(5,5);
+	cell_coordinate cl1(1,1);
+	cell_coordinate cl2(2,2);
+	cell_coordinate cl3(3,3);
+
+	PathPlanner pathPlanner( grid ,cl , cl);
 //	grid , cm.target_x, cm.target_y, cm.start_x, cm.start_y);
 
  	int i = 5;
+
+ 	vector<cell_coordinate> bla (10);
+ 	vector<cell_coordinate>::iterator it;
+
+ 	it = bla.begin();
+ 	it = bla.insert(it, cl);
+	it = bla.insert(it, cl1);
+
+	cout<<bla.size();
+	bla.erase(bla.begin()+1);
+
+
 
 
  	return 0;

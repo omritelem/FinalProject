@@ -9,26 +9,30 @@
 #define PATHPLANNER_H_
 
 #include "Map.h";
+#include "cellcoordinate.h";
 
 class PathPlanner {
 public:
 
 	vector<vector<grid_data> > _grid;
-	int _x_goal;
-	int _y_goal;
-	int _x_start;
-	int _y_start;
+	cell_coordinate _start;
+	cell_coordinate _goal;
+	vector<cell_coordinate> _path;
+	vector<cell_coordinate> _open_list;
+	vector<cell_coordinate> _close_list;
 
-	PathPlanner(vector<vector<grid_data> > grid);
-//	(vector<vector<grid_data> > grid, int x_goal, int y_goal, int x_start, int y_start);
-//	void a_star(int grid[][], int x_coordinate, int y_coordinate, int x_goal, int y_goal);
-	double heuristic_cost_estimate(int x_coordinate, int y_coordinate, int x_goal, int y_goal);
-	double g_cost(double g_from, int x_from, int y_from, int x_to, int y_to);
-	double total_f(double g_cost, double heurisitic);
-	void fill_heuristic();
-	void fill_g(int x_from, int y_from);
+	PathPlanner(vector<vector<grid_data> > grid, cell_coordinate start, cell_coordinate goal);
+	vector<cell_coordinate> astar();
 
 	virtual ~PathPlanner();
+
+private:
+	double heuristic_cost_estimate(cell_coordinate cell_from);
+	double g_cost(cell_coordinate cell_from, cell_coordinate cell_to);
+	void fill_heuristic();
+	void fill_g_f(cell_coordinate cell_from);
+	void reconstruct_path();
+	int find_lowest_f_score();
 };
 
 #endif /* PATHPLANNER_H_ */

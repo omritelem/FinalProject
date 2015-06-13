@@ -9,6 +9,7 @@
 #define MAP_H_
 #include <iostream>
 #include <vector>
+#include "cellcoordinate.h"
 
 using std::vector;
 
@@ -18,8 +19,9 @@ struct grid_data
 	double h_val;
 	double g_val;
 	double f_val;
-	int x_parent;
-	int y_parent;
+	cell_coordinate parent;
+	cell_coordinate current;
+
 };
 
 
