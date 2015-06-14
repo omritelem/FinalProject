@@ -53,8 +53,5 @@ int main()
 	cout<<bla.size();
 	bla.erase(bla.begin()+1);
 
-// ELiya Kadar
-
-
  	return 0;
 }
