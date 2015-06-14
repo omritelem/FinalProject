@@ -33,6 +33,7 @@ private:
 	void fill_g_f(cell_coordinate cell_from);
 	void reconstruct_path();
 	int find_lowest_f_score();
+	bool check_in_close_open_set(vector<cell_coordinate> nodes_set, int row_index, int cols_index);
 };
 
 #endif /* PATHPLANNER_H_ */

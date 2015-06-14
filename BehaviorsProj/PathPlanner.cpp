@@ -54,6 +54,7 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 	int i,j;
 	double currentGval;
 	bool in_close_list = 0;
+	bool in_open_list = 0;
 
 	for(i=cell_from.y_Coordinate-1; i <=cell_from.y_Coordinate+1; i++)
 	{
@@ -64,17 +65,19 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 				if((_grid[i][j].g_val == 0)&&(_grid[i][j].cell_color == 0)&&
 				   (j != cell_from.x_Coordinate)&&(i != cell_from.y_Coordinate))
 				{
-					for (int k = 0; ((k < _close_list.size()) && (in_close_list == 0)); k++) {
-						if ((_close_list[k].x_Coordinate == _grid[i][j].current.x_Coordinate) &&
-							(_close_list[k].y_Coordinate == _grid[i][j].current.y_Coordinate) ) {
-							in_close_list = 1;
-						}
-					}
+					in_close_list = this->check_in_close_open_set(_close_list,i,j);
+//					for (int k = 0; ((k < _close_list.size()) && (in_close_list == 0)); k++) {
+//						if ((_close_list[k].x_Coordinate == _grid[i][j].current.x_Coordinate) &&
+//							(_close_list[k].y_Coordinate == _grid[i][j].current.y_Coordinate) ) {
+//							in_close_list = 1;
+//						}
+//					}
 
 					if (in_close_list != 1) {
 						cell_coordinate cl(i, j);
 						currentGval = g_cost(cell_from, cl);
-						if((_grid[i][j].g_val > currentGval) || (_grid[i][j].g_val == 0)){
+						in_open_list = this->check_in_close_open_set(_open_list,i,j);
+						if(((_grid[i][j].g_val > currentGval) || (_grid[i][j].g_val == 0))&&(in_open_list != 1)){
 							_grid[i][j].g_val = currentGval;
 							_grid[i][j].f_val = _grid[i][j].g_val + _grid[i][j].h_val;
 							_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
@@ -82,10 +85,23 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 						}
 					}
 					in_close_list = 0;
+					in_open_list = 0;
 				}
 			}
 		}
 	}
+}
+
+bool PathPlanner::check_in_close_open_set(vector<cell_coordinate> nodes_set, int row_index, int cols_index)
+{
+	bool in_set = 0;
+	for (int k = 0; ((k < nodes_set.size()) && (in_set == 0)); k++) {
+		if ((nodes_set[k].x_Coordinate == _grid[row_index][cols_index].current.x_Coordinate) &&
+			(nodes_set[k].y_Coordinate == _grid[row_index][cols_index].current.y_Coordinate) ) {
+			in_set = 1;
+		}
+	}
+	return in_set;
 }
 
 PathPlanner::~PathPlanner() {
