@@ -17,6 +17,7 @@ ConfigurationManager::ConfigurationManager(const char* configurationPath) {
 
 }
 
+
 void ConfigurationManager::ReadConfigurationData(const char* configurationPath) {
 	 ifstream myReadFile;
 	 int counter = 0;
