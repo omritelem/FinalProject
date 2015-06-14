@@ -4,6 +4,8 @@
  *  Created on: Dec 14, 2014
  *      Author: user
  */
+
+#include <iostream>
 #include "Robot.h"
 #include "Manager.h"
 #include "Plans/PlnObstacleAvoid.h"
@@ -22,24 +24,27 @@ int main()
 //	Manager manager(&robot, &plnOA);
 //	manager.run();
 
-	ConfigurationManager cm("/home/colman/Documents/LunaWorkSpace/BehaviorsProj/Configuration");
-
-//	ConfigurationManager* cm("/home/colman/Documents/LunaWorkSpace/BehaviorsProj/Configuration");
-// 	ReadConfigurationData("/home/colman/Documents/LunaWorkSpace/BehaviorsProj/Configuration");
-//	thickenMap(cm->map_path, cm->robot_length, cm->robot_width);
+	ConfigurationManager cm;
 
 	Map map;
-	map.thickenMap("/home/colman/git/FinalProject/BehaviorsProj/roboticLabMap.png", 12, 12);
-
-	vector<vector<grid_data> > grid	= map.convertMapToGrid("/home/colman/git/FinalProject/BehaviorsProj/roboticLabMap.png", 2.5 ,10);
+	map.thickenMap(cm.map_path, cm.robot_width);
+	map.convertMapToGrid(cm.map_path, cm.map_resolution, cm.grid_resolution);
 
 	cell_coordinate cl(5,5);
 	cell_coordinate cl1(1,1);
 	cell_coordinate cl2(2,2);
 	cell_coordinate cl3(3,3);
 
-	PathPlanner pathPlanner( grid ,cl , cl);
+	PathPlanner pathPlanner(map._grid ,cl , cl);
 //	grid , cm.target_x, cm.target_y, cm.start_x, cm.start_y);
+
+//	for (int var = 0; var < map._grid.size(); ++var) {
+//		for (int var2 = 0; var2 < map._grid[var].size(); ++var2) {
+//			cout << (int)map._grid[var][var2].cell_color;
+//			cout << " ";
+//		}
+//		cout << endl;
+//	}
 
  	int i = 5;
 

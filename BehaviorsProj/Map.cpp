@@ -12,7 +12,7 @@
 
 //Encode from raw pixels to disk with a single function call
 //The image argument has width * height RGBA pixels or width * height * 4 bytes
-void Map::encodeOneStep1(const char* filename, std::vector<unsigned char> image, unsigned width, unsigned height) {
+void Map::encodeOneStep(const char* filename, std::vector<unsigned char> image, unsigned width, unsigned height) {
 	//Encode the image
 	unsigned error = lodepng::encode(filename, image, width, height);
 
@@ -22,7 +22,7 @@ void Map::encodeOneStep1(const char* filename, std::vector<unsigned char> image,
 				<< lodepng_error_text(error) << std::endl;
 }
 
-void Map::decodeOneStep1(const char* filename) {
+void Map::decodeOneStep(const char* filename) {
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;
 
@@ -36,7 +36,7 @@ void Map::decodeOneStep1(const char* filename) {
 
 	//the pixels are now in the vector "image", 4 bytes per pixel, ordered RGBARGBA..., use it as texture, draw it, ...
 }
-void Map::thickenMap(const char* filename, int robotLengthCM, int robotWidthCM) {
+void Map::thickenMap(const char* filename, int thickenSizeCM) {
 
 	std::vector<unsigned char> image; //the raw pixels
 	unsigned width, height;
@@ -65,8 +65,8 @@ void Map::thickenMap(const char* filename, int robotLengthCM, int robotWidthCM) 
 			if (!(image[y * width * 4 + x * 4 + 0]
 					|| image[y * width * 4 + x * 4 + 1]
 					|| image[y * width * 4 + x * 4 + 2])){
-				for (i = y - robotLengthCM; i <= y + robotLengthCM; i++){
-					for (j = x - robotWidthCM; j <= x + robotWidthCM; j++){
+				for (i = y - thickenSizeCM; i <= y + thickenSizeCM; i++){
+					for (j = x - thickenSizeCM; j <= x + thickenSizeCM; j++){
 						if ((i>=0)&&(j>=0)&&(i<height)&&(j<width)){
 							newImage[i * width * 4 + j * 4 + 0] = 0;
 							newImage[i * width * 4 + j * 4 + 1] = 0;
@@ -76,10 +76,11 @@ void Map::thickenMap(const char* filename, int robotLengthCM, int robotWidthCM) 
 				}
 			}
 		}
-	encodeOneStep1("SwegMap.png", newImage, width, height);
+	encodeOneStep(THICKENED_MAP_NAME, newImage, width, height);
 }
 
-vector<vector<grid_data> > Map::convertMapToGrid(const char* filename, double map_resolution, double grid_resolution){
+void Map::convertMapToGrid(const char* filename, double map_resolution, double grid_resolution){
+
 	std::vector<unsigned char> image;
 	unsigned width, height;
 	unsigned error = lodepng::decode(image, width, height, filename);
@@ -120,7 +121,7 @@ vector<vector<grid_data> > Map::convertMapToGrid(const char* filename, double ma
 			(grid[y / resolution_relation][x / resolution_relation]).parent.y_Coordinate = 0;
 		}
 
-	return grid;
+	_grid = grid;
 }
 
 //Map::Map() {

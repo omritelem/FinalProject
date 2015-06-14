@@ -6,26 +6,29 @@
  */
 
 #include "ConfigurationManager.h"
-#include<iostream>
-#include<fstream>
+#include <iostream>
+#include <fstream>
 #include <stdlib.h>
 
 using namespace std;
-ConfigurationManager::ConfigurationManager(const char* configurationPath) {
-	ReadConfigurationData(configurationPath);
-	convertSizeToCM();
 
+/**
+ * Reads the configuration data from CONFIGURATION_PATH
+ */
+ConfigurationManager::ConfigurationManager() {
+	ReadConfigurationData(CONFIGURATION_PATH);
+	convertSizeToCM();
 }
 
 void ConfigurationManager::ReadConfigurationData(const char* configurationPath) {
 	 ifstream myReadFile;
 	 int counter = 0;
-	 char attribute_name[200];
+	 char attribute_name[MAX_LINE_LENGTH];
 	 myReadFile.open(configurationPath);
-	 while (!myReadFile.eof() && (counter < NUM_READ_LINES)) {
+	 while (!myReadFile.eof() && (counter < NUM_OF_PROPERTIES)) {
 
-		 myReadFile.getline(attribute_name,MAX_LINE_LENGTH, ' ');
-		 myReadFile.getline(this->file_data[counter],MAX_LINE_LENGTH, '\n');
+		 myReadFile.getline(attribute_name, MAX_LINE_LENGTH, ' ');
+		 myReadFile.getline(this->file_data[counter], MAX_LINE_LENGTH, '\n');
 		 counter++;
 	}
 

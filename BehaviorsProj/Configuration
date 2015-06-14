@@ -1,4 +1,4 @@
-map_path: /home/colman/Documents/LunaWorkSpace/BehaviorsProj/roboticLabMap.png
+map_path: roboticLabMap.png
 start_x: 362
 start_y: 305
 yaw: 20
