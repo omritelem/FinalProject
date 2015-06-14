@@ -66,12 +66,6 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 				   (j != cell_from.x_Coordinate)&&(i != cell_from.y_Coordinate))
 				{
 					in_close_list = this->check_in_close_open_set(_close_list,i,j);
-//					for (int k = 0; ((k < _close_list.size()) && (in_close_list == 0)); k++) {
-//						if ((_close_list[k].x_Coordinate == _grid[i][j].current.x_Coordinate) &&
-//							(_close_list[k].y_Coordinate == _grid[i][j].current.y_Coordinate) ) {
-//							in_close_list = 1;
-//						}
-//					}
 
 					if (in_close_list != 1) {
 						cell_coordinate cl(i, j);
