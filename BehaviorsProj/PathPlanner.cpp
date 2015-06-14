@@ -66,12 +66,6 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 				   (j != cell_from.x_Coordinate)&&(i != cell_from.y_Coordinate))
 				{
 					in_close_list = this->check_in_close_open_set(_close_list,i,j);
-//					for (int k = 0; ((k < _close_list.size()) && (in_close_list == 0)); k++) {
-//						if ((_close_list[k].x_Coordinate == _grid[i][j].current.x_Coordinate) &&
-//							(_close_list[k].y_Coordinate == _grid[i][j].current.y_Coordinate) ) {
-//							in_close_list = 1;
-//						}
-//					}
 
 					if (in_close_list != 1) {
 						cell_coordinate cl(i, j);
@@ -82,6 +76,10 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 							_grid[i][j].f_val = _grid[i][j].g_val + _grid[i][j].h_val;
 							_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
 							_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
+							if (in_open_list != 1){
+								cell_coordinate new_node(i, j);
+								_open_list[_open_list.size()] = new_node;
+							}
 						}
 					}
 					in_close_list = 0;
@@ -130,7 +128,7 @@ vector<cell_coordinate> PathPlanner::astar()
 		vector<cell_coordinate>::iterator it_closelist;
 		_close_list[close_index] = _open_list[curr_lowest_f];
 		_open_list.erase(it_openlist+curr_lowest_f);
-
+		this->fill_g_f(_close_list[close_index]);
 	}
 
 	return _path;

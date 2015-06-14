@@ -16,7 +16,6 @@ public:
 	double x_Coordinate;
 	double y_Coordinate;
 
-
 	virtual ~cell_coordinate();
 };
 
