@@ -6,18 +6,15 @@
  */
 
 #include "ConfigurationManager.h"
-#include <iostream>
-#include <fstream>
+#include<iostream>
+#include<fstream>
 #include <stdlib.h>
 
 using namespace std;
-
-/**
- * Reads the configuration data from CONFIGURATION_PATH
- */
-ConfigurationManager::ConfigurationManager() {
-	ReadConfigurationData(CONFIGURATION_PATH);
+ConfigurationManager::ConfigurationManager(const char* configurationPath) {
+	ReadConfigurationData(configurationPath);
 	convertSizeToCM();
+
 }
 
 void ConfigurationManager::ReadConfigurationData(const char* configurationPath) {

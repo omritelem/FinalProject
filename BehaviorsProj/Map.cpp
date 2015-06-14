@@ -79,7 +79,7 @@ void Map::thickenMap(const char* filename, int thickenSizeCM) {
 	encodeOneStep(THICKENED_MAP_NAME, newImage, width, height);
 }
 
-void Map::convertMapToGrid(const char* filename, double map_resolution, double grid_resolution){
+vector<vector<grid_data> > Map::convertMapToGrid(const char* filename, double map_resolution, double grid_resolution){
 
 	std::vector<unsigned char> image;
 	unsigned width, height;
@@ -121,7 +121,17 @@ void Map::convertMapToGrid(const char* filename, double map_resolution, double g
 			(grid[y / resolution_relation][x / resolution_relation]).parent.y_Coordinate = 0;
 		}
 
-	_grid = grid;
+	//_original_grid = grid;
+	return grid;
+}
+
+void Map::createGrids(const char* originalMapFile, double map_resolution, double grid_resolution){
+	_original_grid = convertMapToGrid(originalMapFile,
+										map_resolution,
+										grid_resolution);
+	_thickened_grid = convertMapToGrid(THICKENED_MAP_NAME,
+										map_resolution,
+										grid_resolution);
 }
 
 //Map::Map() {

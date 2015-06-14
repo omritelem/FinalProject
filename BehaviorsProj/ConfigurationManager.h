@@ -5,10 +5,13 @@
  *      Author: user
  */
 
+#include "Defines.h"
+#include <string>
+
 #ifndef CONFIGURATIONMANAGER_H_
 #define CONFIGURATIONMANAGER_H_
 
-#include "Defines.h"
+//#define CONFIGURA?TION_PATH '/home/user/workspace/Robots/Configuration'
 
 using namespace std;
 
@@ -25,11 +28,11 @@ public:
 	double robot_width;
 	double map_resolution;
 	double grid_resolution;
+	char* configurationPath;
 
-	ConfigurationManager();
+	ConfigurationManager(const char* configurationPath);
 	virtual ~ConfigurationManager();
 
-private:
 	void ReadConfigurationData(const char* configurationPath);
 	void convertSizeToCM();
 };
