@@ -29,6 +29,7 @@ void ConfigurationManager::ReadConfigurationData(const char* configurationPath) 
 		 counter++;
 	}
 
+
 	this->map_path = this->file_data[0];
 	this->start_x = atoi(this->file_data[1]);
 	this->start_y = atoi(this->file_data[2]);
