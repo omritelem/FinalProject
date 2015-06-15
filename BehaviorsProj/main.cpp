@@ -12,6 +12,7 @@
 #include "Map.h"
 #include "PathPlanner.h"
 #include "ConfigurationManager.h"
+#include <vector>
 
 using namespace std;
 
@@ -32,32 +33,36 @@ int main()
 	map.thickenMap(cm.map_path, cm.robot_width);
 	map.createGrids(cm.map_path, cm.map_resolution, cm.grid_resolution);
 
-	cell_coordinate cl(5,5);
-	cell_coordinate cl1(1,1);
-	cell_coordinate cl2(2,2);
-	cell_coordinate cl3(3,3);
-
-	PathPlanner pathPlanner(map._original_grid ,cl , cl);
-//	grid , cm.target_x, cm.target_y, cm.start_x, cm.start_y);
-
 	printMatrix(map._original_grid);
 	for (int var = 0; var < 10; var++) {
 		cout << endl << "";
 	}
 	printMatrix(map._thickened_grid);
 
+	// Running the a* algorithm on the thickened map
+	cell_coordinate start_point(cm.start_x, cm.start_y);
+	cell_coordinate end_point(cm.start_x, cm.start_y);
+	PathPlanner pathPlanner(map._thickened_grid, start_point, end_point);
+
+	vector<cell_coordinate> ass_star_result = pathPlanner.astar();
+
+	cout << "THE RESULT IS:";
+	cout << endl;
+	for (int i = 0; i < ass_star_result.size(); ++i) {
+		cout << ass_star_result[i].x_Coordinate << " " << ass_star_result[i].y_Coordinate << endl;
+	}
 
  	int i = 5;
 
- 	vector<cell_coordinate> bla (10);
- 	vector<cell_coordinate>::iterator it;
-
- 	it = bla.begin();
- 	it = bla.insert(it, cl);
-	it = bla.insert(it, cl1);
-
-	cout<<bla.size();
-	bla.erase(bla.begin()+1);
+// 	vector<cell_coordinate> bla (10);
+// 	vector<cell_coordinate>::iterator it;
+//
+// 	it = bla.begin();
+// 	it = bla.insert(it, cl);
+//	it = bla.insert(it, cl1);
+//
+//	cout<<bla.size();
+//	bla.erase(bla.begin()+1);
 
  	return 0;
 }
