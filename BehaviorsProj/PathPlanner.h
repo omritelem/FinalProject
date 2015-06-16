@@ -13,9 +13,7 @@
 
 #include <set>
 
-
 using std::set;
-
 
 class PathPlanner {
 public:

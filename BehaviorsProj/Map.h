@@ -27,7 +27,7 @@ struct grid_data
 	double g_val;
 	double f_val;
 	cell_coordinate parent;
-	cell_coordinate current;
+//	cell_coordinate current;
 };
 
 

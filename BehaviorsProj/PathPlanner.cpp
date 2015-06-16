@@ -58,33 +58,43 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 	bool in_open_list = false;
 
 	_close_list.insert(cell_from);
-	for(i=cell_from.y_Coordinate-1; i <=cell_from.y_Coordinate+1; i++)
+	//for(i=cell_from.y_Coordinate-1; i <=cell_from.y_Coordinate+1; i++)
+	for(j=cell_from.y_Coordinate-1; j <=cell_from.y_Coordinate+1; j++)
 	{
-		for(j=cell_from.x_Coordinate-1; j <= cell_from.x_Coordinate+1; j++)
+		//for(j=cell_from.x_Coordinate-1; j <= cell_from.x_Coordinate+1; j++)
+		for(i=cell_from.x_Coordinate-1; i <= cell_from.x_Coordinate+1; i++)
 		{
 			if((i>=0)&&(j>=0)&&(i<_grid.size())&&(j<_grid[0].size()))
 			{
-				if((_grid[i][j].cell_color == 0)&&
-				   ((j != cell_from.x_Coordinate)||(i != cell_from.y_Coordinate))&&
-				   (!check_in_set(_close_list,i,j)))
+				if (i == _goal.x_Coordinate && j == _goal.y_Coordinate )
 				{
-					cell_coordinate cl(i, j);
-					currentGval = g_cost(cell_from, cl);
-					in_open_list = check_in_set(_open_list,i,j);
-					if(in_open_list){
-						if (_grid[i][j].g_val > currentGval){
+					_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
+					_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
+				}
+				else {
+
+					bool is_close = check_in_set(_close_list,i,j);
+					if((_grid[i][j].cell_color == 0)&&((j != cell_from.x_Coordinate)||(i != cell_from.y_Coordinate))&&(!is_close))
+					{
+						cell_coordinate cl(i, j);
+						//cell_coordinate cl(j, i);
+						currentGval = g_cost(cell_from, cl);
+						in_open_list = check_in_set(_open_list,i,j);
+						if(in_open_list){
+							if (_grid[i][j].g_val > currentGval){
+								_grid[i][j].g_val = currentGval;
+								_grid[i][j].f_val = _grid[i][j].g_val + _grid[i][j].h_val;
+								_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
+								_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
+							}
+						}
+						else{
 							_grid[i][j].g_val = currentGval;
 							_grid[i][j].f_val = _grid[i][j].g_val + _grid[i][j].h_val;
 							_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
 							_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
+							_open_list.insert(cl);
 						}
-					}
-					else{
-						_grid[i][j].g_val = currentGval;
-						_grid[i][j].f_val = _grid[i][j].g_val + _grid[i][j].h_val;
-						_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
-						_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
-						_open_list.insert(cl);
 					}
 				}
 			}
@@ -102,8 +112,8 @@ bool PathPlanner::check_in_set(set<cell_coordinate> nodes_set, int row_index, in
 	if (!nodes_set.empty()) {
 		for (it = nodes_set.begin(); it != nodes_set.end(); ++it) {
 			current_cell = *it;
-			if ((current_cell.x_Coordinate == _grid[row_index][cols_index].current.x_Coordinate ) &&
-				(current_cell.y_Coordinate == _grid[row_index][cols_index].current.y_Coordinate )){
+			if ((current_cell.x_Coordinate == row_index ) &&
+				(current_cell.y_Coordinate == cols_index )){
 				return true;
 		   }
 		}
@@ -120,7 +130,7 @@ vector<cell_coordinate> PathPlanner::astar()
 {
 	this->fill_heuristic();
 	this->fill_g_f(_start);
-
+	int size = _open_list.size();
 	while (!_open_list.empty())
 	{
 		cell_coordinate lowest_f_cell = find_lowest_f_score();

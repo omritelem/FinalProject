@@ -27,7 +27,8 @@ int main()
 //	Manager manager(&robot, &plnOA);
 //	manager.run();
 
-	ConfigurationManager cm(CONFIGURATION_PATH);
+//	ConfigurationManager cm(CONFIGURATION_PATH);
+	ConfigurationManager cm("Config_test");
 
 	Map map;
 	map.thickenMap(cm.map_path, cm.robot_width);
