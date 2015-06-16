@@ -13,7 +13,7 @@ PathPlanner::PathPlanner(vector<vector<grid_data> > grid, cell_coordinate start,
 	_grid = grid;
 	_start = start;
 	_goal = goal;
-	_open_list.resize( _grid.size() * (_grid[1]).size());
+//	_open_list.resize( _grid.size() * (_grid[0]).size());
 }
 
 double PathPlanner::heuristic_cost_estimate(cell_coordinate cell_from){
@@ -38,13 +38,15 @@ double PathPlanner::g_cost(cell_coordinate cell_from, cell_coordinate cell_to)
 
 void PathPlanner::fill_heuristic( )
 {
+	double hVal;
 	for (int i = 0; i < _grid.size(); i++)
 	{
 		for(int j = 0; j< _grid[i].size(); j++)
 		{
 			if(_grid[i][j].cell_color == 0){
 				cell_coordinate cl(i, j);
-				_grid[i][j].h_val = heuristic_cost_estimate(cl);
+				hVal = heuristic_cost_estimate(cl);
+				_grid[i][j].h_val = hVal;
 			}
 		}
 	}
@@ -53,53 +55,61 @@ void PathPlanner::fill_heuristic( )
 void PathPlanner::fill_g_f(cell_coordinate cell_from){
 	int i,j;
 	double currentGval;
-	bool in_close_list = 0;
-	bool in_open_list = 0;
+	bool in_open_list = false;
 
+	_close_list.insert(cell_from);
 	for(i=cell_from.y_Coordinate-1; i <=cell_from.y_Coordinate+1; i++)
 	{
 		for(j=cell_from.x_Coordinate-1; j <= cell_from.x_Coordinate+1; j++)
 		{
-			if((i>=0)&&(j>=0)&&(i<_grid.size())&&(j<_grid.size()))
+			if((i>=0)&&(j>=0)&&(i<_grid.size())&&(j<_grid[0].size()))
 			{
-				if((_grid[i][j].g_val == 0)&&(_grid[i][j].cell_color == 0)&&
-				   (j != cell_from.x_Coordinate)&&(i != cell_from.y_Coordinate))
+				if((_grid[i][j].cell_color == 0)&&
+				   ((j != cell_from.x_Coordinate)||(i != cell_from.y_Coordinate))&&
+				   (!check_in_set(_close_list,i,j)))
 				{
-					in_close_list = this->check_in_close_open_set(_close_list,i,j);
-
-					if (in_close_list != 1) {
-						cell_coordinate cl(i, j);
-						currentGval = g_cost(cell_from, cl);
-						in_open_list = this->check_in_close_open_set(_open_list,i,j);
-						if(((_grid[i][j].g_val > currentGval) || (_grid[i][j].g_val == 0))&&(in_open_list != 1)){
+					cell_coordinate cl(i, j);
+					currentGval = g_cost(cell_from, cl);
+					in_open_list = check_in_set(_open_list,i,j);
+					if(in_open_list){
+						if (_grid[i][j].g_val > currentGval){
 							_grid[i][j].g_val = currentGval;
 							_grid[i][j].f_val = _grid[i][j].g_val + _grid[i][j].h_val;
 							_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
 							_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
-							if (in_open_list != 1){
-								cell_coordinate new_node(i, j);
-								_open_list[_open_list.size()] = new_node;
-							}
 						}
 					}
-					in_close_list = 0;
-					in_open_list = 0;
+					else{
+						_grid[i][j].g_val = currentGval;
+						_grid[i][j].f_val = _grid[i][j].g_val + _grid[i][j].h_val;
+						_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
+						_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
+						_open_list.insert(cl);
+					}
 				}
 			}
 		}
 	}
 }
 
-bool PathPlanner::check_in_close_open_set(vector<cell_coordinate> nodes_set, int row_index, int cols_index)
-{
-	bool in_set = 0;
-	for (int k = 0; ((k < nodes_set.size()) && (in_set == 0)); k++) {
-		if ((nodes_set[k].x_Coordinate == _grid[row_index][cols_index].current.x_Coordinate) &&
-			(nodes_set[k].y_Coordinate == _grid[row_index][cols_index].current.y_Coordinate) ) {
-			in_set = 1;
+
+bool PathPlanner::check_in_set(set<cell_coordinate> nodes_set, int row_index, int cols_index){
+	cell_coordinate current_cell;
+	set<cell_coordinate>::iterator it; //= nodes_set.begin();
+//	it = nodes_set.end();
+//	++it;
+
+	if (!nodes_set.empty()) {
+		for (it = nodes_set.begin(); it != nodes_set.end(); ++it) {
+			current_cell = *it;
+			if ((current_cell.x_Coordinate == _grid[row_index][cols_index].current.x_Coordinate ) &&
+				(current_cell.y_Coordinate == _grid[row_index][cols_index].current.y_Coordinate )){
+				return true;
+		   }
 		}
 	}
-	return in_set;
+
+	return false;
 }
 
 PathPlanner::~PathPlanner() {
@@ -111,41 +121,39 @@ vector<cell_coordinate> PathPlanner::astar()
 	this->fill_heuristic();
 	this->fill_g_f(_start);
 
-	int close_index = 0;
-
-	_open_list[0] = _start;
-
 	while (!_open_list.empty())
 	{
-		int curr_lowest_f = find_lowest_f_score();
-		if ((_open_list[curr_lowest_f].x_Coordinate == _goal.x_Coordinate) &&
-		    (_open_list[curr_lowest_f].y_Coordinate == _goal.y_Coordinate))
+		cell_coordinate lowest_f_cell = find_lowest_f_score();
+		if (lowest_f_cell.x_Coordinate == _goal.x_Coordinate &&
+		    (lowest_f_cell.y_Coordinate == _goal.y_Coordinate))
 		{
 			reconstruct_path();
 			return _path;
 		}
-		vector<cell_coordinate>::iterator it_openlist;
-		vector<cell_coordinate>::iterator it_closelist;
-		_close_list[close_index] = _open_list[curr_lowest_f];
-		_open_list.erase(it_openlist+curr_lowest_f);
-		this->fill_g_f(_close_list[close_index]);
+
+		std::set<cell_coordinate>::iterator it_openlist;
+		std::set<cell_coordinate>::iterator it_closelist;
+		_open_list.erase(lowest_f_cell);
+		fill_g_f(lowest_f_cell);
 	}
 
 	return _path;
 }
-int PathPlanner::find_lowest_f_score(){
-	int min_index = 0;
+cell_coordinate PathPlanner::find_lowest_f_score(){
+	set<cell_coordinate>::iterator it;
+	cell_coordinate min_cell = *_open_list.begin();
+	cell_coordinate current_cell;
 
-	for(int i = 1; i < _open_list.size(); i++)
-	{
-		if((_grid[_open_list[i].x_Coordinate][_open_list[i].y_Coordinate]).f_val <
-			(_grid[_open_list[min_index].x_Coordinate][_open_list[min_index].y_Coordinate]).f_val)
+	for (it = _open_list.begin(); it != _open_list.end(); ++it) {
+		current_cell = *it;
+		if((_grid[current_cell.x_Coordinate][current_cell.y_Coordinate]).f_val <
+		   (_grid[current_cell.x_Coordinate][current_cell.y_Coordinate]).f_val)
 		{
-			min_index = i;
+			min_cell = current_cell;
 		}
 	}
 
-	return min_index;
+	return min_cell;
 }
 
 void PathPlanner::reconstruct_path()

@@ -11,10 +11,14 @@
 #include "Defines.h"
 #include <iostream>
 #include <vector>
+#include <set>
 #include "cellcoordinate.h"
 #include "ConfigurationManager.h"
 
+using namespace std;
+
 using std::vector;
+using std::set;
 
 struct grid_data
 {
