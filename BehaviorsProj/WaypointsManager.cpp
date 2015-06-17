@@ -7,7 +7,6 @@
 
 #include "WaypointsManager.h"
 
-
 WaypointsManager::WaypointsManager(vector<cell_coordinate> path)
 {
 	astar_path = path;

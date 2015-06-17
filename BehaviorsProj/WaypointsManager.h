@@ -30,3 +30,4 @@ private:
 };
 
 #endif /* WAYPOINTSMANAGER_H_ */
+
