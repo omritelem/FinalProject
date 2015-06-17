@@ -11,6 +11,10 @@
 #include "Map.h";
 #include "cellcoordinate.h";
 
+#include <set>
+
+using std::set;
+
 class PathPlanner {
 public:
 
@@ -18,8 +22,8 @@ public:
 	cell_coordinate _start;
 	cell_coordinate _goal;
 	vector<cell_coordinate> _path;
-	vector<cell_coordinate> _open_list;
-	vector<cell_coordinate> _close_list;
+	set<cell_coordinate> _open_list;
+	set<cell_coordinate> _close_list;
 
 	PathPlanner(vector<vector<grid_data> > grid, cell_coordinate start, cell_coordinate goal);
 	vector<cell_coordinate> astar();
@@ -32,8 +36,8 @@ private:
 	void fill_heuristic();
 	void fill_g_f(cell_coordinate cell_from);
 	void reconstruct_path();
-	int find_lowest_f_score();
-	bool check_in_close_open_set(vector<cell_coordinate> nodes_set, int row_index, int cols_index);
+	cell_coordinate find_lowest_f_score();
+	bool check_in_set(set<cell_coordinate> nodes_set, int row_index, int cols_index);
 };
 
 #endif /* PATHPLANNER_H_ */

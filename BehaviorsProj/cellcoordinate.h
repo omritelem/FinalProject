@@ -8,6 +8,8 @@
 #ifndef CELLCOORDINATE_H_
 #define CELLCOORDINATE_H_
 
+#include "limits.h"
+
 class cell_coordinate {
 public:
 	cell_coordinate();
@@ -17,6 +19,19 @@ public:
 	double y_Coordinate;
 
 	virtual ~cell_coordinate();
+	bool operator<(const cell_coordinate& cel) const
+	{
+		return  (y_Coordinate*INT_MAX + x_Coordinate < cel.y_Coordinate*INT_MAX + cel.x_Coordinate);
+	}
 };
 
 #endif /* CELLCOORDINATE_H_ */
+
+//	bool operator<(const cell_coordinate& cel) const
+//	{
+//		if (hash_val == -1) {
+//			hash_val = y_Coordinate*INT_MAX + x_Coordinate;
+//		}
+//		return x_Coordinate < cel.x_Coordinate;
+//		//return (y_Coordinate*INT_MAX + x_Coordinate < cel.y_Coordinate*INT_MAX + cel.x_Coordinate);
+//	}
