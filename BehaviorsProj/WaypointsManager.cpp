@@ -6,6 +6,7 @@
  */
 
 #include "WaypointsManager.h"
+#include <math.h>
 
 WaypointsManager::WaypointsManager(vector<cell_coordinate> path)
 {
@@ -16,7 +17,8 @@ void WaypointsManager::build_way_point_vector(int num_of_cells)
 {
 	int counter;
 	double m = 0;
-	bool is_vertical = 0;
+
+	// TODO: fill the vector size
 
 	for (int i = 0; i < astar_path.size(); i++)
 	{
@@ -31,20 +33,20 @@ void WaypointsManager::build_way_point_vector(int num_of_cells)
 			{
 				if(astar_path[i].x_Coordinate == astar_path[i-1].x_Coordinate)
 				{
-					is_vertical = 1;
+					is_verticle = 1;
 				}
 				else
 				{
-					is_vertical = 0;
+					is_verticle = 0;
 					m = ((astar_path[i].y_Coordinate - astar_path[i-1].y_Coordinate) / (astar_path[i].x_Coordinate - astar_path[i-1].x_Coordinate));
 				}
 			}
 		}
 		else if ((astar_path[i].x_Coordinate == astar_path[i-1].x_Coordinate))
 		{
-			if(is_vertical == 0)
+			if(is_verticle == 0)
 			{
-				is_vertical = 1;
+				is_verticle = 1;
 				wayPoint wp3(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate , 0);
 				wayPoints[wayPoints.size()] = wp3;
 				counter = 0;
@@ -54,9 +56,9 @@ void WaypointsManager::build_way_point_vector(int num_of_cells)
 		{
 			m = ((astar_path[i].y_Coordinate - astar_path[i-1].y_Coordinate) / (astar_path[i].x_Coordinate - astar_path[i-1].x_Coordinate));
 		}
-		else if((is_vertical == 1) || (m != ((astar_path[i].y_Coordinate - astar_path[i-1].y_Coordinate) / (astar_path[i].x_Coordinate - astar_path[i-1].x_Coordinate))))
+		else if((is_verticle == 1) || (m != ((astar_path[i].y_Coordinate - astar_path[i-1].y_Coordinate) / (astar_path[i].x_Coordinate - astar_path[i-1].x_Coordinate))))
 		{
-			is_vertical == 0;
+			is_verticle == 0;
 			m = (astar_path[i].y_Coordinate - astar_path[i-1].y_Coordinate) / (astar_path[i].x_Coordinate - astar_path[i-1].x_Coordinate);
 			wayPoint wp2(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate , 0);
 			wayPoints[wayPoints.size()] = wp2;
@@ -67,9 +69,69 @@ void WaypointsManager::build_way_point_vector(int num_of_cells)
 	}
 }
 
-double WaypointsManager::calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to, bool is_verticle)
+double WaypointsManager::calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to)
 {
+	if (is_verticle)
+	{
+		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
+		{
+			return (90);
+		}
+		else
+		{
+			return (270);
+		}
+	}
+	else if ( m == 0)
+	{
+		if (cell_to.x_Coordinate > cell_from.x_Coordinate)
+		{
+			return (0);
+		}
+		else
+		{
+			return (180);
+		}
+	}
+	else if (m > 0)
+	{
+		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
+		{
+			return (atan(m));
+		}
+		else
+		{
+			return (180 + atan(m));
+		}
+	}
+	else
+	{
+		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
+		{
+			return (90 + atan(m));
+		}
+		else
+		{
+			return (360 - atan(m));
+		}
+	}
+}
 
+double WaypointsManager::calc_incline(cell_coordinate cell_from, cell_coordinate cell_to)
+{
+	is_verticle = 0;
+	if(cell_from.x_Coordinate == cell_to.x_Coordinate)
+	{
+		is_verticle = 1;
+	}
+	else if (cell_from.y_Coordinate == cell_to.y_Coordinate)
+	{
+		return 0;
+	}
+	else
+	{
+		return(cell_to.y_Coordinate - cell_from.y_Coordinate) / (cell_to.x_Coordinate - cell_from.x_Coordinate);
+	}
 }
 
 WaypointsManager::WaypointsManager() {

@@ -22,10 +22,12 @@ public:
 
 private:
 	vector<cell_coordinate> astar_path;
+	bool is_verticle = 0;
 
-	double calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to, bool is_verticle);
+	double calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to);
 	WaypointsManager();
 	WaypointsManager(vector<cell_coordinate> path);
+	double calc_incline(cell_coordinate cell_from, cell_coordinate cell_to);
 	virtual ~WaypointsManager();
 };
 
