@@ -17,6 +17,7 @@ using std::vector;
 class WaypointsManager {
 public:
 
+
 	vector<wayPoint> wayPoints;
 	void build_way_point_vector(int num_of_cells);
 

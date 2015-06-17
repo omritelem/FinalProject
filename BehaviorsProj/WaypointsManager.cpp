@@ -69,6 +69,7 @@ void WaypointsManager::build_way_point_vector(int num_of_cells)
 	}
 }
 
+
 double WaypointsManager::calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to)
 {
 	if (is_verticle)
