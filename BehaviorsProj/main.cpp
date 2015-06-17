@@ -27,18 +27,18 @@ int main()
 //	Manager manager(&robot, &plnOA);
 //	manager.run();
 
-//	ConfigurationManager cm(CONFIGURATION_PATH);
-	ConfigurationManager cm("Config_test");
+	ConfigurationManager cm(CONFIGURATION_PATH);
+	//ConfigurationManager cm("Config_test");
 
 	Map map;
 	map.thickenMap(cm.map_path, cm.robot_width);
 	map.createGrids(cm.map_path, cm.map_resolution, cm.grid_resolution);
 
-//	printMatrix(map._original_grid);
-//	for (int var = 0; var < 10; var++) {
-//		cout << endl << "";
-//	}
-//	printMatrix(map._thickened_grid);
+	printMatrix(map._original_grid);
+	for (int var = 0; var < 10; var++) {
+		cout << endl << "";
+	}
+	printMatrix(map._thickened_grid);
 
 	// Running the a* algorithm on the thickened map
 	// calculating robot location on grid...

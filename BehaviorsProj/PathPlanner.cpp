@@ -27,11 +27,11 @@ double PathPlanner::g_cost(cell_coordinate cell_from, cell_coordinate cell_to)
 {
 	if(( cell_from.x_Coordinate != cell_to.x_Coordinate) && ( cell_from.y_Coordinate != cell_to.y_Coordinate))
 		{
-			return (_grid[cell_from.x_Coordinate][cell_from.y_Coordinate].g_val + 14);
+			return (_grid[cell_from.y_Coordinate][cell_from.x_Coordinate].g_val + 14);
 		}
 		else
 		{
-			return (_grid[cell_from.x_Coordinate][cell_from.y_Coordinate].g_val + 10);
+			return (_grid[cell_from.y_Coordinate][cell_from.x_Coordinate].g_val + 10);
 		}
 }
 
@@ -44,7 +44,8 @@ void PathPlanner::fill_heuristic( )
 		for(int j = 0; j< _grid[i].size(); j++)
 		{
 			if(_grid[i][j].cell_color == 0){
-				cell_coordinate cl(i, j);
+				//cell_coordinate cl(i, j);
+				cell_coordinate cl(j, i);
 				hVal = heuristic_cost_estimate(cl);
 				_grid[i][j].h_val = hVal;
 			}
@@ -58,26 +59,31 @@ void PathPlanner::fill_g_f(cell_coordinate cell_from){
 	bool in_open_list = false;
 
 	_close_list.insert(cell_from);
-	//for(i=cell_from.y_Coordinate-1; i <=cell_from.y_Coordinate+1; i++)
-	for(j=cell_from.y_Coordinate-1; j <=cell_from.y_Coordinate+1; j++)
+	for(i=cell_from.y_Coordinate-1; i <=cell_from.y_Coordinate+1; i++)
+	//for(j=cell_from.y_Coordinate-1; j <=cell_from.y_Coordinate+1; j++)
 	{
-		//for(j=cell_from.x_Coordinate-1; j <= cell_from.x_Coordinate+1; j++)
-		for(i=cell_from.x_Coordinate-1; i <= cell_from.x_Coordinate+1; i++)
+		for(j=cell_from.x_Coordinate-1; j <= cell_from.x_Coordinate+1; j++)
+		//for(i=cell_from.x_Coordinate-1; i <= cell_from.x_Coordinate+1; i++)
 		{
 			if((i>=0)&&(j>=0)&&(i<_grid.size())&&(j<_grid[0].size()))
 			{
-				if (i == _goal.x_Coordinate && j == _goal.y_Coordinate )
+//				if (i == _goal.x_Coordinate && j == _goal.y_Coordinate )
+				if (i == _goal.y_Coordinate && j == _goal.x_Coordinate )
 				{
+					cell_coordinate cl2(j, i);
 					_grid[i][j].parent.x_Coordinate = cell_from.x_Coordinate;
 					_grid[i][j].parent.y_Coordinate = cell_from.y_Coordinate;
+					_grid[i][j].g_val = 0;
+					_grid[i][j].f_val = 0;
+					_open_list.insert(cl2);
 				}
 				else {
 
 					bool is_close = check_in_set(_close_list,i,j);
-					if((_grid[i][j].cell_color == 0)&&((j != cell_from.x_Coordinate)||(i != cell_from.y_Coordinate))&&(!is_close))
+					if((_grid[i][j].cell_color == 0)&&(((j != cell_from.x_Coordinate)||(i != cell_from.y_Coordinate)))&&(!is_close))
 					{
-						cell_coordinate cl(i, j);
-						//cell_coordinate cl(j, i);
+						//cell_coordinate cl(i, j);
+					    cell_coordinate cl(j, i);
 						currentGval = g_cost(cell_from, cl);
 						in_open_list = check_in_set(_open_list,i,j);
 						if(in_open_list){
@@ -112,8 +118,10 @@ bool PathPlanner::check_in_set(set<cell_coordinate> nodes_set, int row_index, in
 	if (!nodes_set.empty()) {
 		for (it = nodes_set.begin(); it != nodes_set.end(); ++it) {
 			current_cell = *it;
-			if ((current_cell.x_Coordinate == row_index ) &&
-				(current_cell.y_Coordinate == cols_index )){
+//			if ((current_cell.x_Coordinate == row_index ) &&
+//				(current_cell.y_Coordinate == cols_index )){
+			if ((current_cell.x_Coordinate == cols_index ) &&
+				(current_cell.y_Coordinate == row_index )){
 				return true;
 		   }
 		}
@@ -156,8 +164,10 @@ cell_coordinate PathPlanner::find_lowest_f_score(){
 
 	for (it = _open_list.begin(); it != _open_list.end(); ++it) {
 		current_cell = *it;
-		if((_grid[current_cell.x_Coordinate][current_cell.y_Coordinate]).f_val <
-		   (_grid[current_cell.x_Coordinate][current_cell.y_Coordinate]).f_val)
+//		if((_grid[current_cell.x_Coordinate][current_cell.y_Coordinate]).f_val <
+//		   (_grid[current_cell.x_Coordinate][current_cell.y_Coordinate]).f_val)
+		if((_grid[current_cell.y_Coordinate][current_cell.x_Coordinate]).f_val <
+		   (_grid[min_cell.y_Coordinate][min_cell.x_Coordinate]).f_val)
 		{
 			min_cell = current_cell;
 		}
@@ -168,26 +178,57 @@ cell_coordinate PathPlanner::find_lowest_f_score(){
 
 void PathPlanner::reconstruct_path()
 {
-	double current_x_coordinate, current_y_coordinate;
-	int i = 0;
+	double current_x_coordinate, current_y_coordinate, pre_x_coordinate, pre_y_coordinate;
+	int i = 1;
 	vector<cell_coordinate> path;
+
+	//set<cell_coordinate> path;
+
 	current_x_coordinate = _goal.x_Coordinate;
 	current_y_coordinate = _goal.y_Coordinate;
 
 	cell_coordinate currCell(current_x_coordinate, current_y_coordinate);
-	path[i] = currCell;
-	while ((current_x_coordinate != _start.x_Coordinate)&&(current_y_coordinate != _start.y_Coordinate)){
+
+	while ((current_x_coordinate != _start.x_Coordinate)||(current_y_coordinate != _start.y_Coordinate)){
 		i++;
-		current_x_coordinate = _grid[current_x_coordinate][current_y_coordinate].parent.x_Coordinate;
-		current_y_coordinate = _grid[current_x_coordinate][current_y_coordinate].parent.y_Coordinate;
-		cell_coordinate currCell(current_x_coordinate, current_y_coordinate);
-		path[i] = currCell;
+		pre_x_coordinate = current_x_coordinate;
+		pre_y_coordinate = current_y_coordinate;
+
+//		current_x_coordinate = _grid[current_x_coordinate][current_y_coordinate].parent.x_Coordinate;
+//		current_y_coordinate = _grid[current_x_coordinate][current_y_coordinate].parent.y_Coordinate;
+		current_x_coordinate = _grid[pre_y_coordinate][pre_x_coordinate].parent.x_Coordinate;
+		current_y_coordinate = _grid[pre_y_coordinate][pre_x_coordinate].parent.y_Coordinate;
+		//cell_coordinate currCell(current_x_coordinate, current_y_coordinate);
+		//path[i] = currCell;
 	}
 
-	cell_coordinate currCell2(_start.x_Coordinate, _start.y_Coordinate);
-	path[i+1] = currCell2;
+	path.resize(i);
+	_path.resize(i);
 
-	for (int j = path.size() - 1; j == 0; j--){
+	i = 0;
+
+	current_x_coordinate = _goal.x_Coordinate;
+	current_y_coordinate = _goal.y_Coordinate;
+
+	cell_coordinate currCell2(current_x_coordinate, current_y_coordinate);
+
+	path[0] = currCell2;
+
+	while ((current_x_coordinate != _start.x_Coordinate)||(current_y_coordinate != _start.y_Coordinate)){
+		i++;
+		pre_x_coordinate = current_x_coordinate;
+		pre_y_coordinate = current_y_coordinate;
+
+		current_x_coordinate = _grid[pre_y_coordinate][pre_x_coordinate].parent.x_Coordinate;
+		current_y_coordinate = _grid[pre_y_coordinate][pre_x_coordinate].parent.y_Coordinate;
+		cell_coordinate currCell3(current_x_coordinate, current_y_coordinate);
+		path[i] = currCell3;
+	}
+
+	//cell_coordinate currCell2(_start.x_Coordinate, _start.y_Coordinate);
+	//path[i+1] = currCell2;
+
+	for (int j = path.size() - 1; j >= 0; j--){
 		_path[path.size() -1 - j] = path[j];
 	}
 }
