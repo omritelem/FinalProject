@@ -8,7 +8,8 @@
 #include "LocalizationManager.h"
 
 LocalizationManager::LocalizationManager() {
-    Particle* p = new Particle(0, 0, 0);
+	cell_coordinate cell(0,0);
+    Particle* p = new Particle(cell, 0);
     arrParticles.push_front(*p);
 }
 
@@ -30,13 +31,14 @@ void LocalizationManager::update(double dX, double dY, double dTeta, double delt
         tempIterator++;
 
         // Handle the belief
-        if (dBelief < THRESHOLD && arrParticles.size() > 1)
+        if (dBelief < THRESHOLD && arrParticles.size() > MIN_PARTICLES_NUM)
         {
             arrParticles.erase(iterator);
         }
         else if (dBelief > STANDARD)
         {
-            createChildren(dX, dY, 0.3, 5);
+            //createChildren(dX, dY, 0.3, 5);
+        	createChildren(dX, dY, PARTICLE_RANGE, PARTICLE_NUM_TO_CREATE);
         }
 
         // Copy the temp iterator
@@ -44,18 +46,21 @@ void LocalizationManager::update(double dX, double dY, double dTeta, double delt
     }
 }
 
-
+// This function creates new particels to the robot
 void LocalizationManager::createChildren(double dX, double dY, double dRange, int nParticlesNum)
 {
-    if(arrParticles.size() + nParticlesNum < 100)
+	// Increase the size of the robot only if its below 100
+    if(arrParticles.size() + nParticlesNum < MAX_PARTICLES_NUM)
         {
             for(int i = 0; i < nParticlesNum; ++ i)
             {
+            	// Creating random coordinates and yaw
                 double randX = ((double) (rand() % 101) / 100.0) * dRange;
                 double randY = ((double) (rand() % 101) / 100.0) * dRange;
                 double randYaw = ((double) (rand() % 1000) / 1000.0);
-
-                arrParticles.push_front(Particle(dX + randX, dY + randY, randYaw));
+                // Create new cell coordiante by new coordinates
+                cell_coordinate new_cell(dX + randX, dY + randY);
+                arrParticles.push_front(Particle(new_cell, randYaw));
             }
         }
 }

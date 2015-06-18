@@ -10,25 +10,28 @@
 #include "Map.h"
 #include "Robot.h"
 
+#define NORMALIZE_FACTOR 1.2
+#define TOP_DISTANCE 0.2
+#define TOP_DELTA_TETA 0.01
+
 class Particle {
 
 private:
     // Variables
-    double d_X;
-    double d_Y;
-    double d_Teta;
-    double d_Belief;
+	cell_coordinate _cell;
+    double _Teta;
+    double _Belief;
 
 
 public:
-    Particle(double dX, double dY, double dYaw);
+    Particle(cell_coordinate cell, double dYaw);
 
     // Properties
     double getBelief();
 
     // Methods
     double update(double deltaX, double deltaY, double deltaTeta , LaserProxy* laser);
-    int probMov(double deltaX, double deltaY, double deltaTeta);
+    double probMov(double deltaX, double deltaY, double deltaTeta);
 	virtual ~Particle();
 };
 

@@ -7,11 +7,11 @@
 
 #include "Particle.h"
 
-Particle::Particle(double dX, double dY, double dYaw){
-    this->d_X = dX;
-    this->d_Y = dY;
-    this->d_Teta = dYaw;
-    this->d_Belief = 1;
+Particle::Particle(cell_coordinate cell, double dYaw){
+    this->_cell.x_Coordinate = cell.x_Coordinate;
+    this->_cell.y_Coordinate = cell.y_Coordinate;
+    this->_Teta = dYaw;
+    this->_Belief = 1;
 }
 
 // This function update the particle according to the delats and the laser
@@ -19,24 +19,24 @@ double Particle::update(double deltaX, double deltaY, double deltaTeta , LaserPr
 {
     // Variable Definition
     double predBel;
-    double normalizeFactor = 1.2;
+    //double normalizeFactor = 1.2;
 
     // Update the particle position
-    d_X += deltaX;
-    d_Y += deltaY;
-    d_Teta += deltaTeta;
+    _cell.x_Coordinate += deltaX;
+    _cell.y_Coordinate += deltaY;
+    _Teta += deltaTeta;
 
     // Guess the probability
-    predBel = d_Belief * probMov(deltaX, deltaY, deltaTeta);
+    predBel = _Belief * probMov(deltaX, deltaY, deltaTeta);
 
-    return (normalizeFactor * predBel);
+    return (NORMALIZE_FACTOR * predBel);
 }
 
-int Particle::probMov(double deltaX, double deltaY, double deltaTeta)
+double Particle::probMov(double deltaX, double deltaY, double deltaTeta)
 {
     double dist = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
 
-    if ((dist < 0.2) && (abs(deltaTeta) < 0.01))
+	if ((dist < TOP_DISTANCE) && (abs(deltaTeta) < TOP_DELTA_TETA))
     {
         return 1;
     }
@@ -47,7 +47,7 @@ int Particle::probMov(double deltaX, double deltaY, double deltaTeta)
 // This function is the belief property
 double Particle::getBelief()
 {
-    return (this->d_Belief);
+    return (this->_Belief);
 }
 
 Particle::~Particle() {

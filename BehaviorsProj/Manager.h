@@ -9,11 +9,14 @@
 #define MANAGER_H_
 #include "Plans/PlnObstacleAvoid.h"
 #include "Robot.h"
+#include "LocalizationManager.h"
+
 class Manager {
 	Behavior* _curr;
 	Robot* _robot;
+	LocalizationManager* _localization_manager;
 public:
-	Manager(Robot* robot, Plan* pln);
+	Manager(Robot* robot, Plan* pln, LocalizationManager* manager);
 	void run();
 	virtual ~Manager();
 };

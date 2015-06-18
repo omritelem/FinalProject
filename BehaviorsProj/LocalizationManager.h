@@ -14,6 +14,10 @@ using namespace std;
 
 #define THRESHOLD 0.25
 #define STANDARD 0.7
+#define MAX_PARTICLES_NUM 100
+#define MIN_PARTICLES_NUM 1
+#define PARTICLE_RANGE 0.3
+#define PARTICLE_NUM_TO_CREATE 5
 
 class LocalizationManager {
 public:
