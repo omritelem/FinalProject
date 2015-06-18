@@ -7,9 +7,29 @@
 
 #include "TurnRight.h"
 
+bool Behavior::startCond(){
+
+	if(_robot->isRightFree())
+		return true;
+	else
+		return false;
+}
+
+bool Behavior::stopCond(){
+
+	if(_robot->isForwardFree())
+		return true;
+	else
+		return false;
+}
+
+void Behavior::action(){
+
+	_robot->setSpeed(MOVE_SPEED, TURN_SPEED);
+}
+
 TurnRight::TurnRight(Robot* robot):Behavior(robot) {
 	// TODO Auto-generated constructor stub
-
 }
 
 TurnRight::~TurnRight() {
@@ -18,5 +38,5 @@ TurnRight::~TurnRight() {
 
 void TurnRight::print()
 {
-	cout<<"TurnRight..."<<endl;
+	//cout << "TurnRight..." << endl;
 }
