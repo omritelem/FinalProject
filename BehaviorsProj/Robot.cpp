@@ -9,7 +9,8 @@
 #include <math.h>
 
 Robot::Robot(char* ip, int port) {
-	_pc = new PlayerClient(ip,port);
+
+	_pc = new PlayerClient(ip, port);
 	_pp = new Position2dProxy(_pc);
 	_lp = new LaserProxy(_pc);
 
@@ -19,6 +20,28 @@ Robot::Robot(char* ip, int port) {
 		Read();
 }
 
+void Robot::Read()
+{
+	_pc->Read();
+}
+
+void Robot::setSpeed(float xSpeed, float angularSpeed) {
+	_pp->SetSpeed(xSpeed, angularSpeed);
+}
+
+bool Robot::isRightFree() {
+	if ((*_lp)[RIGHT_LASER_PROXY_VALUE] > 0.5)
+		return true;
+	else
+		return false;
+}
+
+bool Robot::isForwardFree() {
+	if ((*_lp)[FORWARD_LASER_PROXY_VALUE] > 0.5)
+		return true;
+	else
+		return false;
+}
 
 double Robot::getXpos()
 {
@@ -33,7 +56,11 @@ double Robot::getYpos()
 double Robot::getYaw()
 {
 	return 180*(_pp->GetYaw())/M_PI;
+}
 
+LaserProxy* Robot::getLaser()
+{
+	return (_lp);
 }
 
 Robot::~Robot() {
