@@ -7,7 +7,7 @@
 
 #include "TurnRight.h"
 
-bool Behavior::startCond(){
+bool TurnRight::startCond(){
 
 	if(_robot->isRightFree())
 		return true;
@@ -15,7 +15,7 @@ bool Behavior::startCond(){
 		return false;
 }
 
-bool Behavior::stopCond(){
+bool TurnRight::stopCond(){
 
 	if(_robot->isForwardFree())
 		return true;
@@ -23,9 +23,9 @@ bool Behavior::stopCond(){
 		return false;
 }
 
-void Behavior::action(){
+void TurnRight::action(){
 
-	_robot->setSpeed(MOVE_SPEED, TURN_SPEED);
+	_robot->setSpeed(0.0, TURN_SPEED);
 }
 
 TurnRight::TurnRight(Robot* robot):Behavior(robot) {
