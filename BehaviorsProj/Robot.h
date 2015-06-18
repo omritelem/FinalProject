@@ -10,6 +10,7 @@
 
 #include <libplayerc++/playerc++.h>
 #include "Defines.h"
+#define DISTANCE_FROM_OBSTACLES 0.6
 
 using namespace PlayerCc;
 class Robot {
@@ -17,11 +18,12 @@ class Robot {
 	PlayerClient* _pc;
 	Position2dProxy* _pp;
 	LaserProxy* _lp;
-	double x;
-	double y;
-	double yaw;
 
 public:
+
+	double _x;
+	double _y;
+	double _yaw;
 
 	Robot(char* ip, int port);
 	void Read();
@@ -32,6 +34,11 @@ public:
 	double getXpos();
 	double getYpos();
 	double getYaw();
+	void setX(double x);
+	void setY(double y);
+	void setYaw(double yaw);
+	float getLaserDistance(int index);
+	bool checkRange(int nStart, int nEnd);
 
 	virtual ~Robot();
 };

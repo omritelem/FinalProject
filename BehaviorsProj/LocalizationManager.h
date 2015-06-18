@@ -26,13 +26,13 @@ public:
     void update(double dX, double dY, double dTeta, double deltaX, double deltaY,
                 double deltaTeta, LaserProxy* pLaserProxy);
     Particle* getHighestProbParticle();
+    virtual ~LocalizationManager();
 
 private:
     list<Particle> arrParticles;
     Map* map;
 
     void createChildren(double dX, double dY, double dRange, int nParticlesNum);
-	virtual ~LocalizationManager();
 };
 
 #endif /* LOCALIZATIONMANAGER_H_ */

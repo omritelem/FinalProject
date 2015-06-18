@@ -15,8 +15,9 @@ class Manager {
 	Behavior* _curr;
 	Robot* _robot;
 	LocalizationManager* _localization_manager;
+	ConfigurationManager* _cm;
 public:
-	Manager(Robot* robot, Plan* pln, LocalizationManager* manager);
+	Manager(Robot* robot, Plan* pln, LocalizationManager* manager, ConfigurationManager* cm);
 	void run();
 	virtual ~Manager();
 };

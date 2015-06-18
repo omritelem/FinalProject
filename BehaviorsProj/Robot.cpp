@@ -58,9 +58,36 @@ double Robot::getYaw()
 	return 180*(_pp->GetYaw())/M_PI;
 }
 
+void Robot::setX(double x){
+	_x = x;
+}
+void Robot::setY(double y){
+	_y = y;
+}
+void Robot::setYaw(double yaw){
+	_yaw = yaw;
+}
+
 LaserProxy* Robot::getLaser()
 {
 	return (_lp);
+}
+
+float Robot::getLaserDistance(int index)
+{
+    return _lp->GetRange(index);
+}
+
+bool Robot::checkRange(int nStart, int nEnd)
+{
+    bool is_dis_Good = true;
+
+    for (int index = nStart; (index <= nEnd) && (is_dis_Good); index++)
+    {
+    	is_dis_Good = (this->getLaserDistance(index) > DISTANCE_FROM_OBSTACLES);
+    }
+
+    return (is_dis_Good);
 }
 
 Robot::~Robot() {

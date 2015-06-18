@@ -13,7 +13,8 @@
 #define NORMALIZE_FACTOR 1.2
 #define TOP_DISTANCE 0.2
 #define TOP_DELTA_TETA 0.01
-
+#define TRH_DIS 2
+#define TRH_YAW 2
 class Particle {
 
 private:

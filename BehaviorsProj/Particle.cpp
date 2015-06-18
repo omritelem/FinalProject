@@ -28,20 +28,33 @@ double Particle::update(double deltaX, double deltaY, double deltaTeta , LaserPr
 
     // Guess the probability
     predBel = _Belief * probMov(deltaX, deltaY, deltaTeta);
-
-    return (NORMALIZE_FACTOR * predBel);
+    _Belief = NORMALIZE_FACTOR * predBel;
+    return _Belief;
 }
 
 double Particle::probMov(double deltaX, double deltaY, double deltaTeta)
 {
     double dist = sqrt(pow(deltaX, 2) + pow(deltaY, 2));
+    double pro = 0;
 
-	if ((dist < TOP_DISTANCE) && (abs(deltaTeta) < TOP_DELTA_TETA))
-    {
-        return 1;
-    }
+	if(deltaTeta < 0)
+		deltaTeta *= -1;
+	if(dist > TRH_DIS && deltaTeta > TRH_YAW)
+		pro = 0.2;
+	if((dist < TRH_DIS && deltaTeta > TRH_YAW)||(dist > TRH_DIS && deltaTeta < TRH_YAW))
+		pro = 0.4;
+	if(dist < TRH_DIS && deltaTeta < TRH_YAW)
+		pro = 0.8;
+	if(dist < TRH_DIS && deltaTeta == 0)
+		pro = 1;
+	return pro;
 
-    return 0;
+//	if ((dist < TOP_DISTANCE) && (abs(deltaTeta) < TOP_DELTA_TETA))
+//    {
+//        return 1;
+//    }
+//
+//    return 0;
 }
 
 // This function is the belief property
