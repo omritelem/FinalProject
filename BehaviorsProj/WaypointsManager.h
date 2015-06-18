@@ -12,24 +12,26 @@
 #include <vector>
 #include "wayPoint.h"
 #include "cellcoordinate.h"
+#include<set>
 using std::vector;
+using std::set;
 
 class WaypointsManager {
 public:
 
+	set<wayPoint> wayPoints;
 
-	vector<wayPoint> wayPoints;
-	void build_way_point_vector(int num_of_cells);
+	WaypointsManager(vector<cell_coordinate> path);
+	void build_way_point_vector(int num_of_cells, int start_yaw);
+	virtual ~WaypointsManager();
 
 private:
 	vector<cell_coordinate> astar_path;
 	bool is_verticle = 0;
 
 	double calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to);
-	WaypointsManager();
-	WaypointsManager(vector<cell_coordinate> path);
 	double calc_incline(cell_coordinate cell_from, cell_coordinate cell_to);
-	virtual ~WaypointsManager();
+
 };
 
 #endif /* WAYPOINTSMANAGER_H_ */
