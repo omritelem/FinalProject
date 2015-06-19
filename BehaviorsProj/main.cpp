@@ -21,13 +21,14 @@ void printMatrix(vector<vector<grid_data> > lol);
 int main()
 {
 
-//	Robot robot("localhost",6665);
-//	robot.Read();
-//  PlnObstacleAvoid plnOA(&robot);
-//	Manager manager(&robot, &plnOA);
-//	manager.run();
-
+	Robot robot("localhost",6665);
+	robot.Read();
 	ConfigurationManager cm(CONFIGURATION_PATH);
+	PlnObstacleAvoid plnOA(&robot);
+	LocalizationManager lm;
+	Manager manager(&robot, &plnOA, &lm, &cm);
+	manager.run();
+
 	//ConfigurationManager cm("Config_test");
 
 	Map map;

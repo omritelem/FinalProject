@@ -25,4 +25,5 @@ public:
 	}
 };
 
+
 #endif /* WAYPOINT_H_ */

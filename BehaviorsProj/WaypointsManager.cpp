@@ -13,6 +13,7 @@ WaypointsManager::WaypointsManager(vector<cell_coordinate> path)
 	astar_path = path;
 }
 
+
 void WaypointsManager::build_way_point_vector(int num_of_cells, int start_yaw)
 {
 	set<wayPoint>::iterator iter = wayPoints.begin();
