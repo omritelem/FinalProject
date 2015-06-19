@@ -13,6 +13,7 @@
 #include "PathPlanner.h"
 #include "ConfigurationManager.h"
 #include <vector>
+#include "WaypointsManager.h"
 
 using namespace std;
 
@@ -24,13 +25,6 @@ int main()
 	Robot robot("localhost",6665);
 	robot.Read();
 	ConfigurationManager cm(CONFIGURATION_PATH);
-	PlnObstacleAvoid plnOA(&robot);
-	LocalizationManager lm;
-	Manager manager(&robot, &plnOA, &lm, &cm);
-	manager.run();
-
-	//ConfigurationManager cm("Config_test");
-
 	Map map;
 	map.thickenMap(cm.map_path, cm.robot_width);
 	map.createGrids(cm.map_path, cm.map_resolution, cm.grid_resolution);
@@ -40,7 +34,6 @@ int main()
 		cout << endl << "";
 	}
 	printMatrix(map._thickened_grid);
-
 	// Running the a* algorithm on the thickened map
 	// calculating robot location on grid...
 	double resolution_relation = cm.grid_resolution / cm.map_resolution;
@@ -59,6 +52,25 @@ int main()
 	for (int i = 0; i < ass_star_result.size(); ++i) {
 		cout << ass_star_result[i].x_Coordinate << " " << ass_star_result[i].y_Coordinate << endl;
 	}
+
+	WaypointsManager wp(ass_star_result);
+	wp.build_way_point_vector(3,30);
+
+	wayPoint wpm;
+	set<wayPoint>::iterator it;
+
+	for (it = (wp.wayPoints).begin(); it != (wp.wayPoints).end(); ++it) {
+//	for (it = (wp.wayPoints).end(); it != (wp.wayPoints).begin(); --it) {
+		wpm = *it;
+		cout << wpm.x_Coordinate << " " << wpm.y_Coordinate << " " << wpm.yaw << endl;
+	}
+
+	PlnObstacleAvoid plnOA(&robot);
+	LocalizationManager lm;
+	Manager manager(&robot, &plnOA, &lm, &cm);
+	manager.run();
+
+	//ConfigurationManager cm("Config_test");
 
  	int i = 5;
 
