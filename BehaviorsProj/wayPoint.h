@@ -21,9 +21,9 @@ public:
 	virtual ~wayPoint();
 	bool operator<(const wayPoint& wp) const
 	{
-		return  (y_Coordinate*INT_MAX + x_Coordinate + yaw < wp.y_Coordinate*INT_MAX + wp.x_Coordinate + yaw);
+		return (y_Coordinate*INT_MAX + x_Coordinate + yaw > wp.y_Coordinate*INT_MAX + wp.x_Coordinate + yaw);
 	}
 };
 
-
 #endif /* WAYPOINT_H_ */
+

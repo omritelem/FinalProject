@@ -17,16 +17,14 @@ void WaypointsManager::build_way_point_vector(int num_of_cells, int start_yaw)
 {
 	set<wayPoint>::iterator iter = wayPoints.begin();
 	int counter = 0;
-	double m = 0;
+	double m;
 
 	for (int i = 0; i < astar_path.size(); i++)
 	{
-		double new_m;
-		bool is_old_varticle;
-
 		if(i == 0)
 		{
-			wayPoint wp(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate , start_yaw);
+			m = calc_incline(astar_path[i],astar_path[i+1]);
+			wayPoint wp(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate , calc_yaw(m, astar_path[i], astar_path[i+1]));
 			wayPoints.insert(iter,wp);
 			++iter;
 		}
@@ -38,47 +36,32 @@ void WaypointsManager::build_way_point_vector(int num_of_cells, int start_yaw)
 		}
 		else if (counter == num_of_cells)
 		{
-			new_m = calc_incline(astar_path[i-1], astar_path[i]);
+			m = calc_incline(astar_path[i], astar_path[i+1]);
+
+			wayPoint wp(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate , calc_yaw(m, astar_path[i], astar_path[i+1]));
+			wayPoints.insert(iter,wp);
+			++iter;
+			counter = 0;
+		}
+		else
+		{
+			double new_m;
+			bool is_old_varticle;
 			is_old_varticle = is_verticle;
+			new_m = calc_incline(astar_path[i], astar_path[i+1]);
 			if((new_m != m)||(is_old_varticle != is_verticle))
 			{
-				wayPoint wp(astar_path[i-1].x_Coordinate, astar_path[i-1].y_Coordinate , calc_yaw(m, astar_path[i-1], astar_path[i]));
-				wayPoints.insert(iter,wp);
-				++iter;
-				counter = 1;
-				m = new_m;
-			}
-			else
-			{
-				m = new_m;
-				wayPoint wp(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate , calc_yaw(m, astar_path[i-1], astar_path[i]));
+				wayPoint wp(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate, calc_yaw(new_m, astar_path[i], astar_path[i+1]));
 				wayPoints.insert(iter,wp);
 				++iter;
 				counter = 0;
 			}
-		}
-		else if (i == 1)
-		{
-			m = calc_incline(astar_path[i-1], astar_path[i]);
-		}
-		else
-		{
-			is_old_varticle = is_verticle;
-			new_m = calc_incline(astar_path[i-1], astar_path[i]);
-			if((new_m != m)||(is_old_varticle != is_verticle))
-			{
-				wayPoint wp(astar_path[i-1].x_Coordinate, astar_path[i-1].y_Coordinate , calc_yaw(m, astar_path[i-1], astar_path[i]));
-				wayPoints.insert(iter,wp);
-				++iter;
-				counter = 1;
-			}
 			m = new_m;
 		}
-//
+
 		counter++;
 	}
 }
-
 
 double WaypointsManager::calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to)
 {
