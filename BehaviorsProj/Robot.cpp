@@ -12,6 +12,10 @@ Robot::Robot(char* ip, int port) {
 	//For fixing Player's reading BUG
 	for(int i=0;i<15;i++)
 		Read();
+	_pp->SetOdometry(1, 2, 3);
+	int x = _pp->GetXPos();
+	int y = _pp->GetYPos();
+	int z = _pp->GetYaw();
 }
 
 void Robot::Read()
