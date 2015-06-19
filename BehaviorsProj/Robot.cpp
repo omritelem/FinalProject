@@ -2,7 +2,7 @@
 #include "Robot.h"
 #include <math.h>
 
-Robot::Robot(char* ip, int port) {
+Robot::Robot(char* ip, int port, ConfigurationManager* cm) {
 
 	_pc = new PlayerClient(ip, port);
 	_pp = new Position2dProxy(_pc);
@@ -12,10 +12,7 @@ Robot::Robot(char* ip, int port) {
 	//For fixing Player's reading BUG
 	for(int i=0;i<15;i++)
 		Read();
-	_pp->SetOdometry(1, 2, 3);
-	int x = _pp->GetXPos();
-	int y = _pp->GetYPos();
-	int z = _pp->GetYaw();
+	_pp->SetOdometry((double)cm->start_x / 100, (double)cm->start_y / 100, cm->yaw * M_PI / 180 );
 }
 
 void Robot::Read()
@@ -64,13 +61,13 @@ double Robot::getYaw()
 }
 
 void Robot::setX(double x){
-	_x = x;
+	_pp->SetOdometry(x/100, _pp->GetYPos(), _pp->GetYaw());
 }
 void Robot::setY(double y){
-	_y = y;
+	_pp->SetOdometry(_pp->GetXPos(), y/100 ,_pp->GetYaw());
 }
 void Robot::setYaw(double yaw){
-	_yaw = yaw;
+	_pp->SetOdometry(_pp->GetXPos(), _pp->GetYPos() ,_pp->GetYaw());
 }
 
 LaserProxy* Robot::getLaser()

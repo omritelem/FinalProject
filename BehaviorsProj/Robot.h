@@ -4,6 +4,7 @@
 
 #include <libplayerc++/playerc++.h>
 #include "Defines.h"
+#include "ConfigurationManager.h"
 //#define DISTANCE_FROM_OBSTACLES 0.6
 
 using namespace PlayerCc;
@@ -19,7 +20,7 @@ public:
 	double _y;
 	double _yaw;
 
-	Robot(char* ip, int port);
+	Robot(char* ip, int port, ConfigurationManager* cm);
 	void Read();
 	void setSpeed(float xSpeed, float angularSpeed);
 	bool isRightFree();

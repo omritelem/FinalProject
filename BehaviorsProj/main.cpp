@@ -21,10 +21,9 @@ void printMatrix(vector<vector<grid_data> > lol);
 
 int main()
 {
-
-	Robot robot("localhost",6665);
-	robot.Read();
 	ConfigurationManager cm(CONFIGURATION_PATH);
+	Robot robot("localhost",6665, &cm);
+	robot.Read();
 	Map map;
 	map.thickenMap(cm.map_path, cm.robot_width);
 	map.createGrids(cm.map_path, cm.map_resolution, cm.grid_resolution);
