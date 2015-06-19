@@ -11,7 +11,7 @@
 
 bool GoForward::startCond()
 {
-	//return (_robot->checkRange(_robot->getLaserSpec() / 2 - LASER_SPEC_RANGE ,_robot->getLaserSpec() / 2 + LASER_SPEC_RANGE));
+	return _robot->isForwardFree();
 }
 
 bool GoForward::stopCond()

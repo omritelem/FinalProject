@@ -13,9 +13,12 @@
 // Laser Proxy
 #define FORWARD_LASER_PROXY_VALUE 332
 #define RIGHT_LASER_PROXY_VALUE 50
+#define LEFT_LASER_PROXY_VALUE 600
+#define DISTANCE_TOLERANCE 0.6
 
 // Movement
-#define TURN_SPEED 0.5
+#define TURN_RIGHT_SPEED 0.5
+#define TURN_LEFT_SPEED -0.5
 #define MOVE_SPEED 0.5
 
 #endif

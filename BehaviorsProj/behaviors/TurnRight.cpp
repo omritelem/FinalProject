@@ -1,31 +1,16 @@
-/*
- * TurnRight.cpp
- *
- *  Created on: Dec 14, 2014
- *      Author: user
- */
 
 #include "TurnRight.h"
 
 bool TurnRight::startCond(){
-
-	if(_robot->isRightFree())
-		return true;
-	else
-		return false;
+	return (_robot->isRightFree());
 }
 
 bool TurnRight::stopCond(){
-
-	if(_robot->isForwardFree())
-		return true;
-	else
-		return false;
+	return (_robot->isForwardFree());
 }
 
 void TurnRight::action(){
-
-	_robot->setSpeed(0.0, TURN_SPEED);
+	_robot->setSpeed(0.0, TURN_RIGHT_SPEED);
 }
 
 TurnRight::TurnRight(Robot* robot):Behavior(robot) {
@@ -36,7 +21,6 @@ TurnRight::~TurnRight() {
 	// TODO Auto-generated destructor stub
 }
 
-void TurnRight::print()
-{
+void TurnRight::print(){
 	//cout << "TurnRight..." << endl;
 }

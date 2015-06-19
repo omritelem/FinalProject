@@ -1,9 +1,3 @@
-/*
- * Robot.cpp
- *
- *  Created on: Dec 14, 2014
- *      Author: user
- */
 
 #include "Robot.h"
 #include <math.h>
@@ -30,14 +24,21 @@ void Robot::setSpeed(float xSpeed, float angularSpeed) {
 }
 
 bool Robot::isRightFree() {
-	if ((*_lp)[RIGHT_LASER_PROXY_VALUE] > 0.5)
+	if ((*_lp)[RIGHT_LASER_PROXY_VALUE] > DISTANCE_TOLERANCE)
+		return true;
+	else
+		return false;
+}
+
+bool Robot::isLeftFree() {
+	if ((*_lp)[LEFT_LASER_PROXY_VALUE] > DISTANCE_TOLERANCE)
 		return true;
 	else
 		return false;
 }
 
 bool Robot::isForwardFree() {
-	if ((*_lp)[FORWARD_LASER_PROXY_VALUE] > 0.5)
+	if ((*_lp)[FORWARD_LASER_PROXY_VALUE] > DISTANCE_TOLERANCE)
 		return true;
 	else
 		return false;
@@ -84,7 +85,7 @@ bool Robot::checkRange(int nStart, int nEnd)
 
     for (int index = nStart; (index <= nEnd) && (is_dis_Good); index++)
     {
-    	is_dis_Good = (this->getLaserDistance(index) > DISTANCE_FROM_OBSTACLES);
+    	is_dis_Good = (this->getLaserDistance(index) > DISTANCE_TOLERANCE);
     }
 
     return (is_dis_Good);

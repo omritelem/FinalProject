@@ -1,16 +1,10 @@
-/*
- * Robot.h
- *
- *  Created on: Dec 14, 2014
- *      Author: user
- */
 
 #ifndef ROBOT_H_
 #define ROBOT_H_
 
 #include <libplayerc++/playerc++.h>
 #include "Defines.h"
-#define DISTANCE_FROM_OBSTACLES 0.6
+//#define DISTANCE_FROM_OBSTACLES 0.6
 
 using namespace PlayerCc;
 class Robot {
@@ -29,6 +23,7 @@ public:
 	void Read();
 	void setSpeed(float xSpeed, float angularSpeed);
 	bool isRightFree();
+	bool isLeftFree();
 	bool isForwardFree();
 	LaserProxy* getLaser();
 	double getXpos();
