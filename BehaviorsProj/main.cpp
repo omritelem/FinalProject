@@ -67,7 +67,7 @@ int main()
 
 	PlnObstacleAvoid plnOA(&robot);
 	LocalizationManager lm;
-	Manager manager(&robot, &plnOA, &lm, &cm);
+	Manager manager(&robot, &plnOA, &lm, &cm, &wp);
 	manager.run();
 
 	//ConfigurationManager cm("Config_test");
