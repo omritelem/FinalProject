@@ -6,7 +6,7 @@ bool TurnLeft::startCond(){
 }
 
 bool TurnLeft::stopCond(){
-	return (_robot->isRightFree() || _robot->isForwardFree());
+	return (_robot->isForwardFree());
 }
 
 void TurnLeft::action(){
