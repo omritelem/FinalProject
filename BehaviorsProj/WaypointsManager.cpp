@@ -137,4 +137,3 @@ double WaypointsManager::calc_incline(cell_coordinate cell_from, cell_coordinate
 WaypointsManager::~WaypointsManager() {
 	// TODO Auto-generated destructor stub
 }
-
