@@ -74,7 +74,7 @@ void WaypointsManager::build_way_point_vector(int num_of_cells, int start_yaw)
 			}
 			m = new_m;
 		}
-
+//
 		counter++;
 	}
 }

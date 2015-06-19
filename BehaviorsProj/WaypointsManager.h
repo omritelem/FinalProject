@@ -14,7 +14,7 @@
 #include "cellcoordinate.h"
 #include<set>
 using std::vector;
-using std::set;
+using std::set;      //
 
 class WaypointsManager {
 public:
