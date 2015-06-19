@@ -16,7 +16,6 @@
 using std::vector;
 using std::set;
 
-
 class WaypointsManager {
 public:
 
