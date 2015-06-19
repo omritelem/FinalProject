@@ -21,4 +21,7 @@
 #define TURN_LEFT_SPEED -0.5
 #define MOVE_SPEED 0.5
 
+// Behaviors
+#define BEHAVIORS_COUNT 3
+
 #endif

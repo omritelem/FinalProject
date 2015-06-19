@@ -9,8 +9,13 @@
 #include "../behaviors/Behavior.h"
 
 Plan::Plan(Robot* robot) {
+	 _robot = robot;
 }
 
 Plan::~Plan() {
 	// TODO Auto-generated destructor stub
+}
+
+Behavior* Plan::getStartPoint(){
+	return _start;
 }
