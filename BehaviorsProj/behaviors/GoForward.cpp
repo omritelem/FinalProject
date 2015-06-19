@@ -11,7 +11,7 @@
 
 bool GoForward::startCond()
 {
-	_robot->isForwardFree();
+	return _robot->isForwardFree();
 }
 
 bool GoForward::stopCond()
