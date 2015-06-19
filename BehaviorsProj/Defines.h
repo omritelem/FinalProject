@@ -10,7 +10,12 @@
 // Thickened map
 #define THICKENED_MAP_NAME "ThickMap.png"
 
-// Constants
-#define PI 3.1415
+// Laser Proxy
+#define FORWARD_LASER_PROXY_VALUE 332
+#define RIGHT_LASER_PROXY_VALUE 50
+
+// Movement
+#define TURN_SPEED 0.5
+#define MOVE_SPEED 0.5
 
 #endif

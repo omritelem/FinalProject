@@ -14,6 +14,7 @@
 #include <set>
 #include "cellcoordinate.h"
 #include "ConfigurationManager.h"
+#include "wayPoint.h"
 
 using namespace std;
 
