@@ -13,6 +13,8 @@
 #include "wayPoint.h"
 #include "cellcoordinate.h"
 #include<set>
+#include "Defines.h"
+#include <math.h>
 using std::vector;
 using std::set;
 
@@ -20,14 +22,20 @@ class WaypointsManager {
 public:
 
 	set<wayPoint> wayPoints;
+	wayPoint currWayPoint;
 
-	WaypointsManager(vector<cell_coordinate> path);
-	void build_way_point_vector(int num_of_cells, int start_yaw);
+	WaypointsManager(vector<cell_coordinate> path, double gridResolution, double mapResolution);
+	void build_way_point_vector(int num_of_cells);
+	void setNextWayPoint(wayPoint Next);
+	bool isInWayPoint(int x, int y);
 	virtual ~WaypointsManager();
 
 private:
 	vector<cell_coordinate> astar_path;
 	bool is_verticle = 0;
+	wayPoint nextWayPoint;
+	double _gridResolution;
+	double _mapResolution;
 
 	double calc_yaw(double m, cell_coordinate cell_from, cell_coordinate cell_to);
 	double calc_incline(cell_coordinate cell_from, cell_coordinate cell_to);

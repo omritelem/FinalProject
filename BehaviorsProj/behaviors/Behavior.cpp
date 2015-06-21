@@ -14,12 +14,12 @@ Behavior::Behavior(Robot* robot) {
 	_behaviorsCount = 0;
 }
 
-void Behavior::addNextBehavior(Behavior* behavior){
+Behavior* Behavior::addNextBehavior(Behavior* behavior){
 
 	Behavior** tempBeh = new Behavior*[_behaviorsCount + 1];
 
 	if (!tempBeh) {
-		return;
+		return NULL;
 	}
 
 	int i;
@@ -28,10 +28,11 @@ void Behavior::addNextBehavior(Behavior* behavior){
 	}
 
 	tempBeh[i] = behavior;
-	delete [] behavior;
+	delete [] _nextBehavior;
 	_behaviorsCount++;
 
 	_nextBehavior = tempBeh;
+	return this;
 }
 
 Behavior* Behavior::selectNextBehavior(){

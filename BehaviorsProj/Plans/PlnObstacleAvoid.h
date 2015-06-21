@@ -9,11 +9,12 @@
 #define PLNOBSTACLEAVOID_H_
 
 #include "Plan.h"
+#include "../WaypointsManager.h"
 
 class PlnObstacleAvoid: public Plan {
 
 public:
-	PlnObstacleAvoid(Robot* robot);
+	PlnObstacleAvoid(Robot* robot,WaypointsManager* wpm);
 	Behavior* getStartPoint();
 	virtual ~PlnObstacleAvoid();
 };

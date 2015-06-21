@@ -8,15 +8,16 @@
 #include "GoForward.h"
 #include <iostream>
 #include <math.h>
+#include "../Defines.h"
 
 bool GoForward::startCond()
 {
-	return _robot->isForwardFree();
+	return (_robot->checkRange(_robot->getLaserSpec() / 2 - LASER_SPEC, _robot->getLaserSpec() / 2 + LASER_SPEC));
 }
 
 bool GoForward::stopCond()
 {
-	return (!startCond());
+	return (!startCond() || (_wpm->isInWayPoint(_robot->getXpos(), _robot->getYpos())));
 }
 
 void GoForward::action()
@@ -24,9 +25,8 @@ void GoForward::action()
 	_robot->setSpeed(MOVE_SPEED, 0.0);
 }
 
-GoForward::GoForward(Robot* robot):Behavior(robot) {
-	// TODO Auto-generated constructor stub
-
+GoForward::GoForward(Robot* robot, WaypointsManager* wpm):Behavior(robot) {
+	_wpm = wpm;
 }
 
 GoForward::~GoForward() {

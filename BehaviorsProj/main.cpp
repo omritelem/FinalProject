@@ -23,7 +23,7 @@ int main()
 {
 	ConfigurationManager cm(CONFIGURATION_PATH);
 	Robot robot("localhost",6665, &cm);
-	robot.Read();
+	//robot.Read();
 	Map map;
 	map.thickenMap(cm.map_path, cm.robot_width);
 	map.createGrids(cm.map_path, cm.map_resolution, cm.grid_resolution);
@@ -52,8 +52,9 @@ int main()
 		cout << ass_star_result[i].x_Coordinate << " " << ass_star_result[i].y_Coordinate << endl;
 	}
 
-	WaypointsManager wp(ass_star_result);
-	wp.build_way_point_vector(3,30);
+
+	WaypointsManager wp(ass_star_result, cm.grid_resolution, cm.map_resolution);
+	wp.build_way_point_vector(3);
 
 	wayPoint wpm;
 	set<wayPoint>::iterator it;
@@ -64,10 +65,18 @@ int main()
 		cout << wpm.x_Coordinate << " " << wpm.y_Coordinate << " " << wpm.yaw << endl;
 	}
 
-	PlnObstacleAvoid plnOA(&robot);
+	PlnObstacleAvoid plnOA(&robot, &wp);
 	LocalizationManager lm;
-	Manager manager(&robot, &plnOA, &lm, &cm, &wp);
-	manager.run();
+
+	while(true)
+	    {
+	        robot.Read();
+	        robot.setSpeed(0.25, 0.0);
+	        cout << robot.getXpos() << " " << robot.getYpos() << " " << endl;
+	    }
+
+	//Manager manager(&robot, &plnOA, &lm, &cm, &wp);
+	//manager.run();
 
 	//ConfigurationManager cm("Config_test");
 

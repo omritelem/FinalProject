@@ -13,6 +13,7 @@ class Robot {
 	PlayerClient* _pc;
 	Position2dProxy* _pp;
 	LaserProxy* _lp;
+	ConfigurationManager* _cm;
 
 public:
 
@@ -35,6 +36,7 @@ public:
 	void setYaw(double yaw);
 	float getLaserDistance(int index);
 	bool checkRange(int nStart, int nEnd);
+	double getLaserSpec();
 
 	virtual ~Robot();
 };

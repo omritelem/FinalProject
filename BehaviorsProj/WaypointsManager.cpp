@@ -8,12 +8,14 @@
 #include "WaypointsManager.h"
 #include <math.h>
 
-WaypointsManager::WaypointsManager(vector<cell_coordinate> path)
+WaypointsManager::WaypointsManager(vector<cell_coordinate> path, double gridResolution, double mapResolution)
 {
 	astar_path = path;
+	_gridResolution = gridResolution;
+	_mapResolution = mapResolution;
 }
 
-void WaypointsManager::build_way_point_vector(int num_of_cells, int start_yaw)
+void WaypointsManager::build_way_point_vector(int num_of_cells)
 {
 	set<wayPoint>::iterator iter = wayPoints.begin();
 	int counter = 0;
@@ -27,6 +29,15 @@ void WaypointsManager::build_way_point_vector(int num_of_cells, int start_yaw)
 			wayPoint wp(astar_path[i].x_Coordinate, astar_path[i].y_Coordinate , calc_yaw(m, astar_path[i], astar_path[i+1]));
 			wayPoints.insert(iter,wp);
 			++iter;
+
+			currWayPoint.x_Coordinate = wp.x_Coordinate;
+			currWayPoint.y_Coordinate = wp.y_Coordinate;
+			currWayPoint.yaw = wp.yaw;
+
+			nextWayPoint.x_Coordinate = wp.x_Coordinate;
+			nextWayPoint.y_Coordinate = wp.y_Coordinate;
+			nextWayPoint.yaw = wp.yaw;
+
 		}
 		else if ( i== (astar_path.size() - 1))
 		{
@@ -76,46 +87,98 @@ double WaypointsManager::calc_yaw(double m, cell_coordinate cell_from, cell_coor
 	{
 		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
 		{
-			return (90);
+			return (270);
 		}
 		else
 		{
-			return (270);
+			return (90);
 		}
 	}
 	else if ( m == 0)
 	{
 		if (cell_to.x_Coordinate > cell_from.x_Coordinate)
 		{
-			return (angle);
+			return (180 + angle);
 		}
 		else
 		{
-			return (180 + angle);
+			return (angle);
 		}
 	}
 	else if (m > 0)
 	{
 		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
 		{
-			return (angle);
+			return (360 - angle);
 		}
 		else
 		{
-			return (180 + angle);
+			return (180 - angle);
 		}
 	}
 	else
 	{
 		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
 		{
-			return (90 + angle);
+			return (180 + angle);
 		}
 		else
 		{
-			return (360 - angle);
+			return (angle);
 		}
 	}
+
+//	double angle;
+//
+//	if(!is_verticle)
+//	{
+//		angle = 180 * atan(m) / M_PI;
+//	}
+//
+//	if (is_verticle)
+//	{
+//		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
+//		{
+//			return (90);
+//		}
+//		else
+//		{
+//			return (270);
+//		}
+//	}
+//	else if ( m == 0)
+//	{
+//		if (cell_to.x_Coordinate > cell_from.x_Coordinate)
+//		{
+//			return (angle);
+//		}
+//		else
+//		{
+//			return (180 + angle);
+//		}
+//	}
+//	else if (m > 0)
+//	{
+//		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
+//		{
+//			return (angle);
+//		}
+//		else
+//		{
+//			return (180 + angle);
+//		}
+//	}
+//	else
+//	{
+//		if (cell_to.y_Coordinate > cell_from.y_Coordinate)
+//		{
+//			return (90 + angle);
+//		}
+//		else
+//		{
+//			return (360 - angle);
+//		}
+//	}
 }
 
 double WaypointsManager::calc_incline(cell_coordinate cell_from, cell_coordinate cell_to)
@@ -133,6 +196,31 @@ double WaypointsManager::calc_incline(cell_coordinate cell_from, cell_coordinate
 	}
 }
 
+void WaypointsManager::setNextWayPoint(wayPoint Next)
+{
+	currWayPoint.x_Coordinate = nextWayPoint.x_Coordinate;
+	currWayPoint.y_Coordinate = nextWayPoint.y_Coordinate;
+	currWayPoint.yaw = nextWayPoint.yaw;
+
+	nextWayPoint.x_Coordinate = Next.x_Coordinate;
+	nextWayPoint.y_Coordinate = Next.y_Coordinate;
+	nextWayPoint.yaw = Next.yaw;
+}
+
+
+bool WaypointsManager::isInWayPoint(int x, int y)
+{
+	int dx = nextWayPoint.x_Coordinate - x;
+	int dy = nextWayPoint.y_Coordinate - y;
+	double distance = sqrt(dx^2 + dy^2);
+
+	//if (distance*_gridResolution <= TOLLERANCE)
+	if (distance*(_gridResolution / _mapResolution) <= TOLLERANCE)
+	{
+		return true;
+	}
+	return false;
+}
 
 WaypointsManager::~WaypointsManager() {
 	// TODO Auto-generated destructor stub

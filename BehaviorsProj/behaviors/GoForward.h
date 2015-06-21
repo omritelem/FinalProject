@@ -10,17 +10,22 @@
 
 #include "Behavior.h"
 #include "../Robot.h"
+#include "../WaypointsManager.h"
 
 class GoForward: public Behavior {
 
 public:
 
-	GoForward(Robot* robot);
+	GoForward(Robot* robot,  WaypointsManager* Wpm);
 	bool startCond();
 	bool stopCond();
 	void action();
 	void print();
 	virtual ~GoForward();
+
+private:
+	WaypointsManager* _wpm;
+
 };
 
 #endif /* GOFORWARD_H_ */
