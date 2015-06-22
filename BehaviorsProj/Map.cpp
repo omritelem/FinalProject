@@ -134,6 +134,68 @@ void Map::createGrids(const char* originalMapFile, double map_resolution, double
 										grid_resolution);
 }
 
+int Map::checkNearestObs(cell_coordinate point, int angle){
+
+	int xDirection;
+	int yDirection;
+
+	switch (angle%360) {
+		case 0:
+			xDirection = 1;
+			yDirection = 0;
+			break;
+		case 45:
+			xDirection = 1;
+			yDirection = 1;
+			break;
+		case 90:
+			xDirection = 0;
+			yDirection = 1;
+			break;
+		case 135:
+			xDirection = -1;
+			yDirection = 1;
+			break;
+		case 180:
+			xDirection = -1;
+			yDirection = 0;
+			break;
+		case 225:
+			xDirection = -1;
+			yDirection = -1;
+			break;
+		case 270:
+			xDirection = 0;
+			yDirection = -1;
+			break;
+		case 315:
+			xDirection = 1;
+			yDirection = -1;
+			break;
+		default:
+			return -1; // wrong angle
+	}
+
+	int x = point.x_Coordinate;
+	int y = point.y_Coordinate;
+	int counter = 0;
+
+	while (y > 0 && x > 0 && y < _original_grid.size() && x < _original_grid[0].size()){
+		if (_original_grid[y][x].cell_color == 1) {
+			break;
+		}
+		counter++;
+		x += xDirection;
+		y += yDirection;
+	}
+
+	if (xDirection == 0 || yDirection == 0) {
+		return counter*10;
+	} else {
+		return counter*14; //14.14...
+	}
+}
+
 //Map::Map() {
 //	// TODO Auto-generated constructor stub
 //

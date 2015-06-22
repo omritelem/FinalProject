@@ -47,6 +47,7 @@ public:
 	vector<vector<grid_data> > convertMapToGrid(const char* filename, double map_resolution, double grid_resolution);
 	void thickenMap(const char* filename, int thickenSizeCM);
 	void createGrids(const char* originalMapFile, double map_resolution, double grid_resolution);
+	int checkNearestObs(cell_coordinate point, int angle);
 
 	virtual ~Map();
 };
