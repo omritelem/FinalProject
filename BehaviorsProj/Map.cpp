@@ -134,12 +134,19 @@ void Map::createGrids(const char* originalMapFile, double map_resolution, double
 										grid_resolution);
 }
 
-int Map::checkNearestObs(cell_coordinate point, int angle){
+double Map::checkNearestObs(cell_coordinate point, double angle){
+
+	int roundedAngle = angle;
+	if (roundedAngle % 45 < 22.5) {
+		roundedAngle = (roundedAngle/45)*45;
+	} else {
+		roundedAngle = (roundedAngle/45 + 1)*45;
+	}
 
 	int xDirection;
 	int yDirection;
 
-	switch (angle%360) {
+	switch (roundedAngle%360) {
 		case 0:
 			xDirection = 1;
 			yDirection = 0;
@@ -192,7 +199,7 @@ int Map::checkNearestObs(cell_coordinate point, int angle){
 	if (xDirection == 0 || yDirection == 0) {
 		return counter*10;
 	} else {
-		return counter*14; //14.14...
+		return counter*14.14215; // sqrt(200)
 	}
 }
 
