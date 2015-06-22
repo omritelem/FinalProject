@@ -20,8 +20,9 @@ public:
 	double _x;
 	double _y;
 	double _yaw;
+	int _grid_rows;
 
-	Robot(char* ip, int port, ConfigurationManager* cm);
+	Robot(char* ip, int port, ConfigurationManager* cm,int grid_rows);
 	void Read();
 	void setSpeed(float xSpeed, float angularSpeed);
 	bool isRightFree();

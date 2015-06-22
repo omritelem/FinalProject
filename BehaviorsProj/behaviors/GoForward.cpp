@@ -17,6 +17,7 @@ bool GoForward::startCond()
 
 bool GoForward::stopCond()
 {
+	_robot->Read();
 	return (!startCond() || (_wpm->isInWayPoint(_robot->getXpos(), _robot->getYpos())));
 }
 
@@ -35,5 +36,5 @@ GoForward::~GoForward() {
 
 void GoForward::print()
 {
-	//cout << "TurnRight..." << endl;
+
 }

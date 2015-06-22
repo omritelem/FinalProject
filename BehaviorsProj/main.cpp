@@ -22,11 +22,15 @@ void printMatrix(vector<vector<grid_data> > lol);
 int main()
 {
 	ConfigurationManager cm(CONFIGURATION_PATH);
-	Robot robot("localhost",6665, &cm);
+	//Robot robot("localhost",6665, &cm, map._original_grid.size());
 	//robot.Read();
 	Map map;
 	map.thickenMap(cm.map_path, cm.robot_width);
 	map.createGrids(cm.map_path, cm.map_resolution, cm.grid_resolution);
+
+	cout << map._original_grid.size() <<  "Grid Row" << endl;
+
+	Robot robot("localhost",6665, &cm, map._original_grid.size());
 
 	printMatrix(map._original_grid);
 	for (int var = 0; var < 10; var++) {
@@ -67,16 +71,16 @@ int main()
 
 	PlnObstacleAvoid plnOA(&robot, &wp);
 	LocalizationManager lm;
+//
+//	while(true)
+//	    {
+//	        robot.Read();
+//	        robot.setSpeed(0.25, 0.0);
+//	        cout << robot.getXpos() << " " << robot.getYpos() << " " << endl;
+//	    }
 
-	while(true)
-	    {
-	        robot.Read();
-	        robot.setSpeed(0.25, 0.0);
-	        cout << robot.getXpos() << " " << robot.getYpos() << " " << endl;
-	    }
-
-	//Manager manager(&robot, &plnOA, &lm, &cm, &wp);
-	//manager.run();
+	Manager manager(&robot, &plnOA, &lm, &cm, &wp);
+	manager.run();
 
 	//ConfigurationManager cm("Config_test");
 

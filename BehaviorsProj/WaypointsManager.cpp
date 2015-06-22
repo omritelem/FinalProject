@@ -7,6 +7,7 @@
 
 #include "WaypointsManager.h"
 #include <math.h>
+using namespace std;
 
 WaypointsManager::WaypointsManager(vector<cell_coordinate> path, double gridResolution, double mapResolution)
 {
@@ -98,11 +99,11 @@ double WaypointsManager::calc_yaw(double m, cell_coordinate cell_from, cell_coor
 	{
 		if (cell_to.x_Coordinate > cell_from.x_Coordinate)
 		{
-			return (180 + angle);
+			return (angle);
 		}
 		else
 		{
-			return (angle);
+			return (180 + angle);
 		}
 	}
 	else if (m > 0)
@@ -208,14 +209,19 @@ void WaypointsManager::setNextWayPoint(wayPoint Next)
 }
 
 
-bool WaypointsManager::isInWayPoint(int x, int y)
+bool WaypointsManager::isInWayPoint(double x,double y)
 {
-	int dx = nextWayPoint.x_Coordinate - x;
-	int dy = nextWayPoint.y_Coordinate - y;
-	double distance = sqrt(dx^2 + dy^2);
+	double dx = nextWayPoint.x_Coordinate - x;
+	double dy = nextWayPoint.y_Coordinate - y;
+	double distance = sqrt(pow(dx, 2) + pow(dy, 2));
+
+	cout << "way point x"<< " " << nextWayPoint.x_Coordinate << " " << "x" << " " << x << endl;
+	cout << "way point y" << " " << nextWayPoint.y_Coordinate << " " << "y" << " "  << y << endl;
+	cout << "yaw" << nextWayPoint.yaw <<  endl;
+	cout << (distance) << endl;
 
 	//if (distance*_gridResolution <= TOLLERANCE)
-	if (distance*(_gridResolution / _mapResolution) <= TOLLERANCE)
+	if (distance*_gridResolution <= TOLLERANCE)
 	{
 		return true;
 	}

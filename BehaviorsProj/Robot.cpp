@@ -2,12 +2,13 @@
 #include "Robot.h"
 #include <math.h>
 
-Robot::Robot(char* ip, int port, ConfigurationManager* cm) {
+Robot::Robot(char* ip, int port, ConfigurationManager* cm, int grid_rows) {
 
 	_pc = new PlayerClient(ip, port);
 	_pp = new Position2dProxy(_pc);
 	_lp = new LaserProxy(_pc);
 	_cm = cm;
+	_grid_rows = grid_rows;
 
 	_pp->SetMotorEnable(true);
 	//For fixing Player's reading BUG
@@ -15,8 +16,21 @@ Robot::Robot(char* ip, int port, ConfigurationManager* cm) {
 		Read();
 	//_pp->SetOdometry(cm->grid_resolution * ((double)cm->start_x / 100), cm->grid_resolution * ((double)cm->start_y / 100), cm->yaw * M_PI / 180 );
 	//_pp->SetOdometry(((double)cm->start_x / 100) / (cm->grid_resolution / cm->map_resolution) , ((double)cm->start_y / 100) / (cm->grid_resolution / cm->map_resolution), 90*M_PI/180); //cm->yaw * M_PI / 180 );
-	_pp->SetOdometry(((double)cm->start_x / 100), ((double)cm->start_y / 100), 90*M_PI/180);
+
+
+	//_pp->SetOdometry(((double)cm->start_x / 100), 0, 90*M_PI/180);
+	//final
+	//_pp->SetOdometry(((double)cm->start_x / _cm->map_resolution), ((double)cm->start_y / _cm->map_resolution), cm->yaw*M_PI/180);
+	_pp->SetOdometry(((double)cm->start_x / (_cm->grid_resolution / _cm->map_resolution)/ (_cm->grid_resolution)), ((_grid_rows / _cm->grid_resolution) - (((double)cm->start_y) / (_cm->grid_resolution / _cm->map_resolution)/ (_cm->grid_resolution))) ,cm->yaw*M_PI/180);
+	//_pp->SetOdometry(((double)cm->start_x / _cm->map_resolution), ((double)cm->start_y / _cm->map_resolution), 90*M_PI/180);
 			//cm->yaw * M_PI / 180 );
+
+
+
+
+
+	//((((_grid_rows / _cm->grid_resolution)) - ((double)cm->start_y) / (_cm->grid_resolution / _cm->map_resolution)/ (_cm->grid_resolution)))
+
 }
 
 void Robot::Read()
@@ -51,19 +65,15 @@ bool Robot::isForwardFree() {
 
 double Robot::getXpos()
 {
-	int xPos = ((_pp->GetXPos())*100 / (_cm->grid_resolution / _cm->map_resolution));
-	//return ((_pp->GetXPos())*100 / _cm->grid_resolution);
-	//cout << " " << _pp->GetXPos()*100 << endl;
-	//return ((_pp->GetXPos())*100 / (_cm->grid_resolution / _cm->map_resolution));
-	return xPos;
+	return ((_pp->GetXPos()) * _cm->grid_resolution);
+	//return ((_pp->GetXPos()) / _cm->map_resolution);
 }
 
 double Robot::getYpos()
 {
-	int yPos = ((_pp->GetYPos())*100 / (_cm->grid_resolution / _cm->map_resolution));
-	//return ((_pp->GetYPos())*100 / _cm->grid_resolution);
-	//return ((_pp->GetYPos())*100 / (_cm->grid_resolution / _cm->map_resolution));
-	return yPos;
+	return (((_grid_rows / _cm->grid_resolution) - _pp->GetYPos()) * _cm->grid_resolution);
+//	return ((_grid_rows / _cm->grid_resolution -_pp->GetYPos()) * _cm->grid_resolution);
+	//return ((_grid_rows / _cm->grid_resolution -_pp->GetYPos()) / _cm->map_resolution);
 }
 
 double Robot::getYaw()
